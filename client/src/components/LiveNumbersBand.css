@@ -1,0 +1,114 @@
+.live-band {
+  position: relative;
+  padding: 100px 5%;
+  z-index: 1;
+}
+
+.live-band-inner {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 50px 40px;
+  border-radius: 24px;
+  background:
+    radial-gradient(ellipse at top, rgba(123, 47, 247, 0.12), transparent 60%),
+    rgba(10, 10, 26, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 30px 80px -20px rgba(123, 47, 247, 0.3);
+}
+
+.live-band-header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.live-band-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  border-radius: 999px;
+  background: rgba(0, 212, 255, 0.08);
+  border: 1px solid rgba(0, 212, 255, 0.3);
+  color: var(--accent3);
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.72rem;
+  font-weight: 600;
+  margin-bottom: 18px;
+}
+
+.live-band-pulse {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #00ff88;
+  box-shadow: 0 0 8px #00ff88;
+  animation: liveBandPulse 1.6s ease-in-out infinite;
+}
+@keyframes liveBandPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(1.3); }
+}
+
+.live-band-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 3.6vw, 2.8rem);
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.01em;
+}
+
+.live-band-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 28px;
+}
+
+.live-cell {
+  position: relative;
+  text-align: center;
+  padding: 30px 16px 40px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+.live-cell:hover {
+  transform: translateY(-6px);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.live-num {
+  display: block;
+  font-family: var(--font-display);
+  font-size: clamp(2.4rem, 4.5vw, 3.6rem);
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  margin-bottom: 12px;
+}
+
+.live-label {
+  display: block;
+  color: var(--muted);
+  font-size: 0.92rem;
+  letter-spacing: 0.05em;
+}
+
+.live-underline {
+  position: absolute;
+  bottom: 14px;
+  left: 20%;
+  right: 20%;
+  height: 2px;
+  border-radius: 2px;
+  opacity: 0.8;
+}
+
+@media (max-width: 900px) {
+  .live-band-grid { grid-template-columns: repeat(2, 1fr); gap: 18px; }
+  .live-band-inner { padding: 36px 18px; }
+}

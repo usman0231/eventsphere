@@ -1,0 +1,138 @@
+.about-values { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.about-value-card { text-align: center; padding: 32px 24px; }
+.about-value-icon { font-size: 2.4rem; margin-bottom: 14px; }
+.about-value-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #f0f0ff;
+  margin-bottom: 8px;
+}
+.about-value-desc { color: rgba(240, 240, 255, 0.6); font-size: 0.9rem; line-height: 1.65; }
+
+.about-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+.about-stat {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 20px;
+  padding: 28px 16px;
+  text-align: center;
+}
+.about-stat-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.4rem;
+  font-weight: 900;
+  background: linear-gradient(135deg, #6c3de8, #e83d8a);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 4px;
+}
+.about-stat-label { color: rgba(240, 240, 255, 0.55); font-size: 0.85rem; }
+
+.about-timeline { position: relative; max-width: 900px; margin: 0 auto; }
+.about-timeline::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(180deg, rgba(123, 47, 247, 0.4), rgba(232, 61, 138, 0.4));
+  transform: translateX(-1px);
+}
+.about-timeline-item {
+  position: relative;
+  width: 50%;
+  padding: 0 36px;
+  margin-bottom: 32px;
+}
+.about-timeline-item.left { left: 0; text-align: right; }
+.about-timeline-item.right { left: 50%; }
+.about-timeline-dot {
+  position: absolute;
+  top: 22px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #6c3de8, #e83d8a);
+  box-shadow: 0 0 16px rgba(123, 47, 247, 0.6);
+}
+.about-timeline-item.left .about-timeline-dot { right: -7px; }
+.about-timeline-item.right .about-timeline-dot { left: -7px; }
+.about-timeline-card { padding: 22px 26px; }
+.about-timeline-year {
+  font-size: 0.78rem;
+  letter-spacing: 2px;
+  font-weight: 700;
+  color: #00d4ff;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+.about-timeline-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #f0f0ff;
+  margin-bottom: 6px;
+}
+.about-timeline-desc { color: rgba(240, 240, 255, 0.6); font-size: 0.88rem; line-height: 1.6; }
+
+.about-team { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+.about-team-card { text-align: center; padding: 28px 18px; }
+.about-team-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  font-weight: 900;
+  color: white;
+  margin: 0 auto 14px;
+  box-shadow: 0 8px 24px rgba(123, 47, 247, 0.3);
+}
+.about-team-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  font-weight: 800;
+  color: #f0f0ff;
+  margin-bottom: 4px;
+}
+.about-team-role { color: rgba(240, 240, 255, 0.5); font-size: 0.82rem; }
+
+.about-cta {
+  text-align: center;
+  padding: 60px 30px;
+  background: linear-gradient(135deg, rgba(123, 47, 247, 0.12), rgba(232, 61, 138, 0.08));
+  border: 1px solid rgba(123, 47, 247, 0.25);
+  border-radius: 28px;
+}
+.about-cta-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: #f0f0ff;
+  margin-bottom: 10px;
+}
+.about-cta-sub { color: rgba(240, 240, 255, 0.6); margin-bottom: 28px; }
+.about-cta-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+@media (max-width: 900px) {
+  .about-values { grid-template-columns: 1fr; }
+  .about-stats { grid-template-columns: repeat(2, 1fr); }
+  .about-team { grid-template-columns: repeat(2, 1fr); }
+  .about-timeline::before { left: 20px; }
+  .about-timeline-item, .about-timeline-item.right {
+    width: 100%; left: 0; padding-left: 50px; padding-right: 0; text-align: left;
+  }
+  .about-timeline-item.left { text-align: left; }
+  .about-timeline-item.left .about-timeline-dot,
+  .about-timeline-item.right .about-timeline-dot { left: 13px; right: auto; }
+}

@@ -1,0 +1,492 @@
+/* ============================================================
+   DASHBOARD — cinematic restyle (CSS-only)
+   Class names preserved from previous version.
+   ============================================================ */
+
+.dash-page {
+  min-height: 100vh;
+  background:
+    radial-gradient(ellipse at top, rgba(123, 47, 247, 0.15), transparent 55%),
+    radial-gradient(ellipse at bottom left, rgba(0, 212, 255, 0.12), transparent 55%),
+    linear-gradient(135deg, #07071a 0%, #0a0826 40%, #18062e 100%);
+  background-attachment: fixed;
+  padding-top: 90px;
+  position: relative;
+  overflow-x: hidden;
+}
+
+.dash-page::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(123, 47, 247, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(123, 47, 247, 0.05) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse at 50% 30%, #000 25%, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse at 50% 30%, #000 25%, transparent 80%);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.5;
+}
+
+.dash-orb {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(110px);
+  opacity: 0.22;
+  pointer-events: none;
+  z-index: 0;
+}
+.dash-orb-1 {
+  width: 580px; height: 580px;
+  background: radial-gradient(circle, #7b2ff7, transparent 65%);
+  top: -150px; right: -120px;
+  animation: dashOrbA 28s ease-in-out infinite;
+}
+.dash-orb-2 {
+  width: 480px; height: 480px;
+  background: radial-gradient(circle, #00d4ff, transparent 65%);
+  bottom: -120px; left: -120px;
+  animation: dashOrbB 32s ease-in-out infinite;
+}
+@keyframes dashOrbA {
+  0%, 100% { transform: translate(0,0) scale(1); }
+  50% { transform: translate(-60px, 70px) scale(1.15); }
+}
+@keyframes dashOrbB {
+  0%, 100% { transform: translate(0,0) scale(1); }
+  50% { transform: translate(70px, -60px) scale(1.1); }
+}
+
+.dash-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 40px 5% 80px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── HEADER ── */
+.dash-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-bottom: 40px;
+  animation: dashFadeUp 0.6s ease both;
+}
+
+@keyframes dashFadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.dash-tag {
+  font-size: 0.72rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  font-weight: 600;
+  background: linear-gradient(135deg, #00d4ff, #7b2ff7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 8px;
+}
+
+.dash-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem, 3.4vw, 2.6rem);
+  font-weight: 900;
+  color: #f0f0ff;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+  margin-bottom: 8px;
+}
+
+.dash-name {
+  background: linear-gradient(135deg, #00d4ff 0%, #7b2ff7 50%, #ff006e 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.dash-subtitle {
+  color: rgba(240, 240, 255, 0.55);
+  font-size: 0.95rem;
+}
+
+.dash-header-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.dash-btn-primary {
+  padding: 12px 24px;
+  border-radius: 999px;
+  border: 0;
+  background: linear-gradient(135deg, #7b2ff7 0%, #ff006e 100%);
+  color: #fff;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.92rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 12px 32px -10px rgba(123, 47, 247, 0.6);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  letter-spacing: 0.02em;
+}
+.dash-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 40px -10px rgba(255, 0, 110, 0.7);
+}
+
+.dash-btn-outline {
+  padding: 12px 24px;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 212, 255, 0.35);
+  background: rgba(0, 212, 255, 0.05);
+  color: #00d4ff;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.92rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.25s ease, transform 0.25s ease;
+  letter-spacing: 0.02em;
+}
+.dash-btn-outline:hover {
+  background: rgba(0, 212, 255, 0.15);
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+/* ── STATS GRID ── */
+.dash-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.dash-stat-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 22px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 20px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  transition: transform 0.3s ease, border-color 0.3s ease, background 0.3s ease;
+  overflow: hidden;
+  animation: dashFadeUp 0.6s ease both;
+}
+
+.dash-stat-card:hover {
+  transform: translateY(-4px);
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.dash-stat-icon {
+  width: 52px; height: 52px;
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+  box-shadow: 0 0 24px -8px currentColor;
+}
+
+.dash-stat-value {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.9rem;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  text-shadow: 0 0 24px currentColor;
+}
+
+.dash-stat-label {
+  font-size: 0.76rem;
+  color: rgba(240, 240, 255, 0.55);
+  margin-top: 6px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* ── CHARTS ── */
+.dash-charts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 18px;
+  margin-bottom: 28px;
+}
+
+.dash-chart-card {
+  position: relative;
+  padding: 24px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 20px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  overflow: hidden;
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.dash-chart-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.6), transparent);
+}
+
+.dash-chart-card:hover {
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.dash-chart-wide { grid-column: 1 / -1; }
+
+.dash-card-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #f0f0ff;
+  letter-spacing: -0.005em;
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* top expos list */
+.dash-top-list { display: flex; flex-direction: column; gap: 10px; }
+.dash-top-row {
+  display: grid;
+  grid-template-columns: 56px 1fr auto;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: background 0.25s ease, border-color 0.25s ease;
+}
+.dash-top-row:hover {
+  background: rgba(123, 47, 247, 0.06);
+  border-color: rgba(123, 47, 247, 0.2);
+}
+.dash-top-rank {
+  font-family: 'Playfair Display', serif;
+  font-weight: 900;
+  font-size: 1.3rem;
+  background: linear-gradient(135deg, #ff006e, #ff6b35);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.dash-top-name { color: #f0f0ff; font-weight: 600; font-size: 0.95rem; }
+.dash-top-meta { color: rgba(240, 240, 255, 0.5); font-size: 0.84rem; }
+
+/* ── SECTIONS + EXPOS ── */
+.dash-section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #f0f0ff;
+  letter-spacing: -0.005em;
+  margin: 36px 0 18px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.dash-section-title::before {
+  content: '';
+  display: inline-block;
+  width: 4px;
+  height: 20px;
+  border-radius: 4px;
+  background: linear-gradient(180deg, #00d4ff, #7b2ff7);
+  box-shadow: 0 0 12px rgba(123, 47, 247, 0.6);
+}
+
+.dash-expos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 18px;
+}
+
+.dash-expo-card {
+  position: relative;
+  padding: 22px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden;
+}
+.dash-expo-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(255, 255, 255, 0.18);
+  box-shadow: 0 26px 60px -22px rgba(123, 47, 247, 0.4);
+}
+
+.dash-expo-status {
+  align-self: flex-start;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  border: 1px solid;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+.dash-expo-status::before {
+  content: '';
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 6px currentColor;
+}
+
+.dash-expo-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.18rem;
+  font-weight: 700;
+  color: #f0f0ff;
+  line-height: 1.25;
+}
+
+.dash-expo-meta {
+  font-size: 0.85rem;
+  color: rgba(240, 240, 255, 0.55);
+  line-height: 1.5;
+}
+
+.dash-expo-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 14px;
+  flex-wrap: wrap;
+}
+
+.dash-expo-btn {
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 212, 255, 0.25);
+  background: rgba(0, 212, 255, 0.06);
+  color: #00d4ff;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+.dash-expo-btn:hover {
+  background: rgba(0, 212, 255, 0.18);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+/* ── EMPTY STATES ── */
+.dash-empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 60px 30px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px dashed rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  color: rgba(240, 240, 255, 0.4);
+}
+.dash-empty span { font-size: 3rem; opacity: 0.6; }
+
+.dash-empty-full {
+  text-align: center;
+  padding: 80px 30px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px dashed rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.dash-empty-icon { font-size: 3.6rem; opacity: 0.7; }
+.dash-empty-full h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #f0f0ff;
+}
+.dash-empty-full p {
+  color: rgba(240, 240, 255, 0.55);
+  max-width: 420px;
+  line-height: 1.6;
+}
+
+/* ── ATTENDEE HERO ── */
+.dash-attendee {
+  text-align: center;
+  padding: 100px 30px;
+  border-radius: 24px;
+  background:
+    radial-gradient(ellipse at top, rgba(123, 47, 247, 0.15), transparent 60%),
+    rgba(10, 10, 26, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  margin-top: 24px;
+  box-shadow: 0 40px 100px -30px rgba(123, 47, 247, 0.5);
+}
+
+.dash-attendee-icon {
+  font-size: 4.5rem;
+  filter: drop-shadow(0 0 20px rgba(123, 47, 247, 0.6));
+}
+
+.dash-attendee-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.8rem, 3.4vw, 2.4rem);
+  font-weight: 800;
+  color: #f0f0ff;
+  background: linear-gradient(135deg, #ffffff, #00d4ff 60%, #7b2ff7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.005em;
+}
+
+.dash-attendee-sub {
+  color: rgba(240, 240, 255, 0.6);
+  max-width: 500px;
+  line-height: 1.6;
+  font-size: 1rem;
+}
+
+@media (max-width: 768px) {
+  .dash-header { flex-direction: column; align-items: flex-start; }
+}

@@ -1,0 +1,44 @@
+.nf-page {
+  min-height:100vh;
+  background:linear-gradient(135deg,#0a0a1a 0%,#0d1b3e 30%,#1a0a2e 60%,#0a1a0a 100%);
+  display:flex; align-items:center; justify-content:center;
+  position:relative; overflow:hidden; text-align:center; padding:40px;
+}
+
+.nf-orb { position:fixed; border-radius:50%; filter:blur(80px); opacity:0.2; pointer-events:none; }
+.nf-orb-1 { width:500px;height:500px; background:radial-gradient(circle,#7b2ff7,transparent); top:-100px;left:-100px; }
+.nf-orb-2 { width:400px;height:400px; background:radial-gradient(circle,#ff006e,transparent); bottom:-100px;right:-100px; }
+
+.nf-content { position:relative; z-index:1; max-width:500px; }
+
+.nf-number {
+  font-family:'Playfair Display',serif;
+  font-size:clamp(6rem,15vw,10rem);
+  font-weight:900; line-height:1;
+  background:linear-gradient(135deg,#6c3de8,#e83d8a,#ff6b35);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+  margin-bottom:16px;
+}
+
+.nf-title { font-family:'Playfair Display',serif; font-size:2rem; font-weight:900; color:#f0f0ff; margin-bottom:16px; }
+.nf-sub { color:rgba(240,240,255,0.5); font-size:1rem; line-height:1.7; margin-bottom:40px; }
+
+.nf-actions { display:flex; gap:16px; justify-content:center; flex-wrap:wrap; }
+
+.nf-btn-primary {
+  padding:14px 32px; border-radius:50px; border:none;
+  background:linear-gradient(135deg,#6c3de8,#e83d8a);
+  color:white; font-size:0.95rem; font-weight:700;
+  font-family:'DM Sans',sans-serif; cursor:pointer; transition:all 0.3s;
+  box-shadow:0 0 25px rgba(123,47,247,0.3);
+}
+.nf-btn-primary:hover { transform:translateY(-3px); box-shadow:0 12px 35px rgba(123,47,247,0.5); }
+
+.nf-btn-outline {
+  padding:14px 32px; border-radius:50px;
+  border:1.5px solid rgba(240,240,255,0.2);
+  background:transparent; color:rgba(240,240,255,0.7);
+  font-size:0.95rem; font-weight:600;
+  font-family:'DM Sans',sans-serif; cursor:pointer; transition:all 0.3s;
+}
+.nf-btn-outline:hover { border-color:rgba(123,47,247,0.5); color:#b388ff; transform:translateY(-3px); }

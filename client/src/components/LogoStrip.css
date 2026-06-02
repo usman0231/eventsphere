@@ -1,0 +1,68 @@
+.logo-strip-section {
+  position: relative;
+  padding: 50px 0 30px;
+  z-index: 1;
+}
+
+.logo-strip-label {
+  text-align: center;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  font-size: 0.72rem;
+  margin-bottom: 28px;
+}
+
+.logo-strip-track-wrap {
+  overflow: hidden;
+  width: 100%;
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+
+.logo-strip-track {
+  display: flex;
+  gap: 64px;
+  align-items: center;
+  animation: logoScroll 40s linear infinite;
+  width: max-content;
+  padding: 0 32px;
+}
+
+.logo-strip-track:hover {
+  animation-play-state: paused;
+}
+
+@keyframes logoScroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+.logo-mark {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: rgba(240, 240, 255, 0.45);
+  font-family: var(--font-body);
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition: color 0.3s ease, transform 0.3s ease;
+  flex: 0 0 auto;
+}
+
+.logo-mark:hover {
+  color: rgba(255, 255, 255, 0.95);
+  transform: scale(1.08);
+}
+
+.logo-glyph {
+  font-size: 1.4rem;
+  background: linear-gradient(135deg, #00d4ff, #7b2ff7, #ff006e);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}

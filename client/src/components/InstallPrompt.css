@@ -1,0 +1,75 @@
+.install-prompt {
+  position: fixed;
+  left: 20px;
+  bottom: 20px;
+  z-index: 1100;
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  max-width: 420px;
+  padding: 14px 18px;
+  border-radius: 16px;
+  background: rgba(15, 15, 42, 0.92);
+  border: 1px solid rgba(123, 47, 247, 0.4);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(14px);
+  color: #f0f0ff;
+  font-family: 'DM Sans', sans-serif;
+  animation: install-slide-in 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes install-slide-in {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.install-prompt-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+.install-prompt-text strong { font-size: 0.95rem; font-weight: 700; }
+.install-prompt-text span { font-size: 0.82rem; color: rgba(240, 240, 255, 0.6); }
+
+.install-prompt-actions { display: flex; gap: 8px; flex-shrink: 0; }
+
+.install-btn {
+  padding: 8px 18px;
+  border-radius: 999px;
+  border: none;
+  background: linear-gradient(135deg, #6c3de8, #e83d8a);
+  color: white;
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  font-family: inherit;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.install-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(123, 47, 247, 0.4); }
+
+.install-dismiss {
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: rgba(240, 240, 255, 0.7);
+  font-weight: 600;
+  font-size: 0.82rem;
+  cursor: pointer;
+  font-family: inherit;
+  transition: color 0.2s, border-color 0.2s;
+}
+.install-dismiss:hover { color: #f0f0ff; border-color: rgba(255, 255, 255, 0.3); }
+
+@media (max-width: 600px) {
+  .install-prompt {
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+    max-width: none;
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .install-prompt-actions { justify-content: flex-end; }
+}

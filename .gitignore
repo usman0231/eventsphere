@@ -1,0 +1,22 @@
+# dependencies
+node_modules/
+**/node_modules/
+
+# secrets / env
+.env
+.env.local
+.env.*.local
+server/.env
+client/.env
+
+# build output (Render rebuilds the client on deploy)
+client/build/
+
+# user uploads (ephemeral on host; don't commit)
+server/uploads/
+
+# logs / misc
+*.log
+npm-debug.log*
+.DS_Store
+.qodo/

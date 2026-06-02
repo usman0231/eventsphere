@@ -1,0 +1,95 @@
+.faq-link { color: #b388ff; cursor: pointer; font-weight: 600; }
+.faq-link:hover { color: #e83d8a; }
+
+.faq-categories {
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+  max-width: 900px;
+  margin: 0 auto 60px;
+}
+
+.faq-category { display: flex; flex-direction: column; gap: 14px; }
+
+.faq-cat-header { display: flex; align-items: center; gap: 12px; margin-bottom: 4px; }
+.faq-cat-icon { font-size: 1.4rem; }
+.faq-cat-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #f0f0ff;
+}
+
+.faq-items { display: flex; flex-direction: column; gap: 10px; }
+
+.faq-item {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 14px;
+  overflow: hidden;
+  transition: border-color 0.3s, background 0.3s;
+}
+.faq-item:hover { border-color: rgba(123, 47, 247, 0.25); }
+.faq-item.open {
+  border-color: rgba(123, 47, 247, 0.45);
+  background: rgba(123, 47, 247, 0.08);
+}
+
+.faq-q {
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 18px 22px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  color: #f0f0ff;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.98rem;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+}
+.faq-chevron {
+  font-size: 1.4rem;
+  font-weight: 400;
+  color: #b388ff;
+  width: 24px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.faq-a-wrap {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s ease, padding 0.35s ease;
+}
+.faq-item.open .faq-a-wrap {
+  max-height: 400px;
+  padding: 0 22px 18px;
+}
+.faq-a {
+  color: rgba(240, 240, 255, 0.7);
+  font-size: 0.9rem;
+  line-height: 1.7;
+  margin: 0;
+}
+
+.faq-cta {
+  text-align: center;
+  padding: 50px 30px;
+  background: linear-gradient(135deg, rgba(123, 47, 247, 0.1), rgba(0, 212, 255, 0.06));
+  border: 1px solid rgba(123, 47, 247, 0.22);
+  border-radius: 24px;
+  max-width: 700px;
+  margin: 0 auto;
+}
+.faq-cta-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #f0f0ff;
+  margin-bottom: 8px;
+}
+.faq-cta-sub { color: rgba(240, 240, 255, 0.6); margin-bottom: 22px; }

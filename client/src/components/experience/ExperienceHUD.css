@@ -1,0 +1,453 @@
+/* HUD overlay — DOM elements on top of the R3F canvas */
+
+.exp-hud {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  font-family: 'DM Sans', sans-serif;
+  color: #f0f0ff;
+  z-index: 5;
+}
+
+.exp-hud > * { pointer-events: auto; }
+.exp-hud-hint { pointer-events: none; }
+.exp-corner { pointer-events: none; }
+
+/* ── TOP BAR ── */
+.exp-hud-top {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 28px;
+  background: linear-gradient(180deg, rgba(5,5,15,0.85), transparent);
+}
+
+.exp-hud-top-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+}
+
+.exp-hud-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #00ff88;
+  box-shadow: 0 0 10px #00ff88;
+  animation: expDotPulse 1.6s ease-in-out infinite;
+}
+@keyframes expDotPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.45; transform: scale(1.35); }
+}
+
+.exp-hud-label {
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: rgba(240,240,255,0.85);
+}
+.exp-hud-sep { color: rgba(255,255,255,0.15); }
+.exp-hud-status {
+  color: #00d4ff;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.exp-hud-top-right {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.exp-hud-exit,
+.exp-hud-mute {
+  padding: 9px 18px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: rgba(240,240,255,0.85);
+  font-family: inherit;
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: background 0.25s ease, color 0.25s ease;
+}
+.exp-hud-exit:hover {
+  background: rgba(255,0,110,0.15);
+  color: #ff80ab;
+}
+.exp-hud-mute:hover {
+  background: rgba(0,212,255,0.15);
+  color: #00d4ff;
+}
+
+/* expo selector dropdown injected into top-right */
+.exp-hud-expo {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px 6px 16px;
+  border-radius: 999px;
+  background: rgba(5,5,15,0.55);
+  border: 1px solid rgba(123,47,247,0.4);
+  color: rgba(240,240,255,0.85);
+  font-family: inherit;
+  font-size: 0.84rem;
+  font-weight: 600;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+.exp-hud-expo-label {
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  font-size: 0.66rem;
+  color: rgba(0,212,255,0.85);
+}
+.exp-hud-expo select {
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  border: 0;
+  color: #f0f0ff;
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 6px 26px 6px 8px;
+  cursor: pointer;
+  outline: none;
+  background-image: linear-gradient(45deg, transparent 50%, rgba(0,212,255,0.8) 50%),
+                    linear-gradient(135deg, rgba(0,212,255,0.8) 50%, transparent 50%);
+  background-position: calc(100% - 14px) center, calc(100% - 10px) center;
+  background-size: 4px 4px, 4px 4px;
+  background-repeat: no-repeat;
+}
+.exp-hud-expo select option {
+  background: #0a0a1a;
+  color: #f0f0ff;
+}
+
+/* ── LEFT TELEMETRY ── */
+.exp-hud-left {
+  position: absolute;
+  top: 80px;
+  left: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 200px;
+}
+
+.exp-tel {
+  position: relative;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: rgba(5,5,15,0.55);
+  border: 1px solid rgba(255,255,255,0.08);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  overflow: hidden;
+}
+
+.exp-tel-label {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: rgba(240,240,255,0.45);
+  margin-bottom: 6px;
+}
+
+.exp-tel-value {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.01em;
+}
+
+.exp-tel-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  opacity: 0.8;
+}
+
+/* ── RIGHT (minimap) ── */
+.exp-hud-right {
+  position: absolute;
+  top: 80px;
+  right: 28px;
+  width: 210px;
+}
+
+.exp-hud-card {
+  padding: 16px;
+  border-radius: 14px;
+  background: rgba(5,5,15,0.55);
+  border: 1px solid rgba(255,255,255,0.08);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.exp-hud-card-label {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: rgba(0,212,255,0.85);
+  margin-bottom: 10px;
+}
+
+.exp-hud-map {
+  width: 100%;
+  height: auto;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.exp-hud-card-hint {
+  font-size: 0.75rem;
+  color: rgba(240,240,255,0.55);
+  line-height: 1.5;
+}
+
+/* ── BOTTOM WAYPOINT BAR ── */
+.exp-hud-bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 24px;
+  background: linear-gradient(0deg, rgba(5,5,15,0.85), transparent);
+}
+
+.exp-hud-waypoints {
+  display: flex;
+  gap: 8px;
+  padding: 6px;
+  border-radius: 999px;
+  background: rgba(10,10,26,0.7);
+  border: 1px solid rgba(255,255,255,0.08);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 30px 60px -20px rgba(0,0,0,0.6);
+}
+
+.exp-wp {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  border: 0;
+  background: transparent;
+  color: rgba(240,240,255,0.6);
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.25s ease, background 0.25s ease;
+  letter-spacing: 0.02em;
+}
+
+.exp-wp:hover {
+  color: #fff;
+  background: rgba(255,255,255,0.04);
+}
+
+.exp-wp.is-active {
+  background: linear-gradient(135deg, rgba(123,47,247,0.4), rgba(0,212,255,0.3));
+  color: #fff;
+  box-shadow:
+    0 0 0 1px rgba(123,47,247,0.4) inset,
+    0 10px 24px -8px rgba(123,47,247,0.6);
+}
+
+.exp-wp-icon { font-size: 1.05rem; line-height: 1; }
+
+.exp-hud-hint {
+  font-size: 0.78rem;
+  color: rgba(240,240,255,0.45);
+  letter-spacing: 0.04em;
+}
+
+/* ── SELECTED ATTENDEE CARD ── */
+.exp-selected {
+  position: absolute;
+  bottom: 140px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 360px;
+  padding: 18px 20px;
+  border-radius: 18px;
+  background:
+    radial-gradient(ellipse at top, rgba(123,47,247,0.18), transparent 60%),
+    rgba(5,5,15,0.92);
+  border: 1px solid rgba(255,255,255,0.1);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow:
+    0 0 0 1px rgba(123,47,247,0.2) inset,
+    0 30px 80px -20px rgba(0,0,0,0.8);
+}
+
+.exp-selected-head {
+  display: grid;
+  grid-template-columns: 48px 1fr auto;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.exp-selected-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 0.05em;
+  box-shadow: 0 0 18px currentColor;
+}
+
+.exp-selected-name {
+  color: #f0f0ff;
+  font-weight: 700;
+  font-size: 0.98rem;
+}
+
+.exp-selected-role {
+  color: rgba(240,240,255,0.5);
+  font-size: 0.78rem;
+  margin-top: 2px;
+}
+
+.exp-selected-close {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.04);
+  color: rgba(240,240,255,0.7);
+  font-size: 0.85rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.exp-selected-close:hover {
+  background: rgba(255,0,110,0.15);
+  color: #ff80ab;
+}
+
+.exp-selected-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.exp-selected-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  font-size: 0.84rem;
+  color: rgba(240,240,255,0.65);
+}
+.exp-selected-row:last-of-type { border-bottom: none; }
+.exp-selected-row strong { color: #fff; font-weight: 600; }
+
+.exp-selected-link {
+  margin-top: 8px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(0,255,136,0.08);
+  border: 1px solid rgba(0,255,136,0.3);
+  color: #00ff88;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.exp-link-pulse {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #00ff88;
+  box-shadow: 0 0 8px #00ff88;
+  animation: expDotPulse 1.6s ease-in-out infinite;
+}
+
+/* ── CROSSHAIR CORNERS ── */
+.exp-corner {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  opacity: 0.35;
+}
+.exp-corner-tl { top: 72px; left: 22px; }
+.exp-corner-tr { top: 72px; right: 22px; }
+.exp-corner-bl { bottom: 180px; left: 22px; }
+.exp-corner-br { bottom: 180px; right: 22px; }
+
+/* NOTE: rules below were placed here historically — actual MegaMenu styles live in MegaMenu.css */
+
+/* HoloPanel content rendered via drei <Html /> */
+.holo-panel-content {
+  text-align: center;
+  color: #fff;
+  font-family: 'DM Sans', sans-serif;
+  text-shadow: 0 0 8px rgba(0,212,255,0.8);
+}
+.holo-panel-content .hpc-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  margin-bottom: 4px;
+}
+.holo-panel-content .hpc-value {
+  font-family: 'Playfair Display', serif;
+  font-size: 24px;
+  font-weight: 900;
+  color: #00d4ff;
+  text-shadow: 0 0 14px rgba(0,212,255,1);
+}
+.holo-panel-content .hpc-meta {
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.7);
+  margin-top: 4px;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  .exp-hud-left,
+  .exp-hud-right {
+    display: none;
+  }
+  .exp-corner-bl, .exp-corner-br, .exp-corner-tl, .exp-corner-tr {
+    display: none;
+  }
+  .exp-selected { width: 90vw; bottom: 160px; }
+}

@@ -1,0 +1,245 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+html, body, #root {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0a0a1a 0%, #0d1b3e 30%, #1a0a2e 60%, #0a1a0a 100%);
+  background-attachment: fixed;
+  color: #f0f0ff;
+  font-family: 'DM Sans', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.app-root { min-height:100vh; }
+
+/* ── NAV ── */
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  padding: 18px 5%;
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  background: rgba(10,10,26,0.3);
+  border-bottom: 1px solid rgba(123,47,247,0.1);
+  transition: all 0.4s ease;
+}
+
+.nav.scrolled {
+  padding: 12px 5%;
+  background: rgba(10,10,26,0.92);
+  border-bottom-color: rgba(123,47,247,0.25);
+  box-shadow: 0 4px 30px rgba(0,0,0,0.3);
+}
+
+.logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem;
+  font-weight: 900;
+  background: linear-gradient(135deg, #6c3de8 0%, #e83d8a 50%, #ff6b35 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  cursor: pointer;
+  flex-shrink: 0;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+}
+.logo-img {
+  height: 64px;
+  width: auto;
+  display: block;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  list-style: none;
+  flex: 1;
+}
+
+.nav-links a {
+  color: rgba(240,240,255,0.6);
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: all 0.3s;
+  position: relative;
+  white-space: nowrap;
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px; left: 0;
+  width: 0; height: 2px;
+  background: linear-gradient(135deg, #6c3de8, #e83d8a);
+  transition: width 0.3s;
+  border-radius: 2px;
+}
+
+.nav-links a:hover { color: #f0f0ff; }
+.nav-links a:hover::after { width: 100%; }
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.user-menu {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-avatar {
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #6c3de8, #e83d8a);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s;
+  color: white;
+  flex-shrink: 0;
+}
+
+.user-avatar:hover { transform:scale(1.1); box-shadow:0 0 20px rgba(123,47,247,0.5); }
+
+.user-name-nav {
+  font-size: 0.9rem;
+  color: rgba(240,240,255,0.7);
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.btn-login {
+  background: transparent;
+  border: none;
+  color: rgba(240,240,255,0.7);
+  font-size: 0.95rem;
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.btn-login:hover { color:#f0f0ff; background:rgba(255,255,255,0.06); }
+
+.btn-logout {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.15);
+  color: rgba(240,240,255,0.6);
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding: 6px 16px;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.btn-logout:hover { border-color:rgba(255,0,110,0.5); color:#ff80ab; }
+
+.nav-cta {
+  padding: 10px 26px;
+  border-radius: 50px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: linear-gradient(135deg, #6c3de8, #e83d8a);
+  border: none;
+  color: #fff;
+  transition: all 0.3s;
+  box-shadow: 0 0 20px rgba(123,47,247,0.4);
+  font-family: 'DM Sans', sans-serif;
+  white-space: nowrap;
+}
+
+.nav-cta:hover { transform:translateY(-2px); box-shadow:0 8px 30px rgba(123,47,247,0.6); }
+
+/* ── HAMBURGER ── */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  margin-left: auto;
+}
+
+.hamburger span {
+  display: block;
+  width: 24px; height: 2px;
+  background: #f0f0ff;
+  border-radius: 2px;
+  transition: all 0.3s;
+}
+
+.hamburger.open span:nth-child(1) { transform:rotate(45deg) translate(5px,5px); }
+.hamburger.open span:nth-child(2) { opacity:0; }
+.hamburger.open span:nth-child(3) { transform:rotate(-45deg) translate(5px,-5px); }
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width:6px; }
+::-webkit-scrollbar-track { background:#0a0a1a; }
+::-webkit-scrollbar-thumb { background:linear-gradient(#7b2ff7,#ff006e); border-radius:3px; }
+
+/* ── RESPONSIVE ── */
+@media (max-width:900px) {
+  .nav-links {
+    display: none;
+    position: fixed;
+    top: 65px; left:0; right:0;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    background: rgba(10,10,26,0.98);
+    border-bottom: 1px solid rgba(123,47,247,0.2);
+    padding: 16px 5%;
+  }
+
+  .nav-links.open { display:flex; }
+  .nav-links li { width:100%; }
+  .nav-links a { display:block; padding:12px 0; font-size:1rem; border-bottom:1px solid rgba(255,255,255,0.05); }
+  .nav-links a::after { display:none; }
+  .hamburger { display:flex; }
+  .user-name-nav { display:none; }
+  .btn-login { display:none; }
+}
+
+@media (max-width:480px) {
+  .nav { padding:14px 5%; gap:16px; }
+  .logo { font-size:1.4rem; }
+}
+
+/* Notification Bell in navbar */
+.user-menu {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.notif-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}

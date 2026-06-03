@@ -1,0 +1,33 @@
+.code-input {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin: 6px 0 4px;
+}
+
+.code-box {
+  width: 48px;
+  height: 56px;
+  text-align: center;
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #f0f0ff;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1.5px solid rgba(255, 255, 255, 0.18);
+  border-radius: 12px;
+  outline: none;
+  font-family: inherit;
+  caret-color: #6c3de8;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+}
+
+.code-box:focus {
+  border-color: #6c3de8;
+  background: rgba(108, 61, 232, 0.12);
+  box-shadow: 0 0 0 3px rgba(108, 61, 232, 0.25);
+}
+
+@media (max-width: 480px) {
+  .code-input { gap: 7px; }
+  .code-box { width: 40px; height: 50px; font-size: 1.4rem; }
+}

@@ -6,14 +6,14 @@ node_modules/
 .env
 .env.local
 .env.*.local
-server/.env
-client/.env
 
-# build output (Render rebuilds the client on deploy)
-client/build/
+# next.js build output
+.next/
+out/
+next-env.d.ts
 
-# user uploads (ephemeral on host; don't commit)
-server/uploads/
+# vercel
+.vercel/
 
 # logs / misc
 *.log

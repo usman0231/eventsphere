@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import dayjs from 'dayjs';
+import { toast } from 'react-toastify';
 import api from '../../utils/api';
 import { useSocket } from '../../context/SocketContext';
 
@@ -25,18 +26,23 @@ export default function AttendancePage() {
   const [q, setQ] = useState('');
   const [debouncedQ, setDebouncedQ] = useState('');
 
-  // Keep the latest filters available to the socket handler / poller without
-  // re-subscribing on every keystroke.
+  // Modals
+  const [detailRow, setDetailRow] = useState(null);
+  const [undoRow, setUndoRow] = useState(null);
+  const [undoReason, setUndoReason] = useState('');
+  const [undoing, setUndoing] = useState(false);
+  const [showAudit, setShowAudit] = useState(false);
+  const [auditRows, setAuditRows] = useState([]);
+  const [auditLoading, setAuditLoading] = useState(false);
+
   const filtersRef = useRef({ expo, status, debouncedQ });
   filtersRef.current = { expo, status, debouncedQ };
 
-  // Debounce the search box.
   useEffect(() => {
     const t = setTimeout(() => setDebouncedQ(q), 350);
     return () => clearTimeout(t);
   }, [q]);
 
-  // Load the expo list once for the filter dropdown.
   useEffect(() => {
     // limit=100 (server max) so the filter lists all expos, not just the first page.
     api.get('/api/expos?limit=100')
@@ -57,32 +63,58 @@ export default function AttendancePage() {
         api.get(`/api/checkin/stats${e ? `?expo=${e}` : ''}`),
       ]);
       setRows(listRes.data.data || []);
-      setStats(statsRes.data.data || stats);
+      setStats(statsRes.data.data || { totalRegistered: 0, totalCheckedIn: 0, remaining: 0, attendancePct: 0 });
     } catch {
       /* transient — next poll retries */
     } finally {
       setLoading(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Refetch whenever filters change.
   useEffect(() => { load(true); }, [expo, status, debouncedQ, load]);
 
-  // Poll for near-real-time updates (works on Vercel where sockets are off).
   useEffect(() => {
     const id = setInterval(() => load(false), POLL_MS);
     return () => clearInterval(id);
   }, [load]);
 
-  // If a socket is available (local dev / dedicated host), update instantly too.
   useEffect(() => {
     if (!socket) return;
     socket.emit('join', 'checkin');
-    const onNew = () => load(false);
-    socket.on('checkin:new', onNew);
-    return () => socket.off('checkin:new', onNew);
+    const onChange = () => load(false);
+    socket.on('checkin:new', onChange);
+    socket.on('checkin:undo', onChange);
+    return () => { socket.off('checkin:new', onChange); socket.off('checkin:undo', onChange); };
   }, [socket, load]);
+
+  const confirmUndo = async () => {
+    if (!undoRow || undoing) return;
+    setUndoing(true);
+    try {
+      await api.post(`/api/checkin/${undoRow._id}/undo`, { reason: undoReason.trim() });
+      toast.success(`Check-in undone for ${undoRow.user?.name || 'attendee'}`);
+      setUndoRow(null);
+      setUndoReason('');
+      load(false);
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Could not undo check-in');
+    } finally {
+      setUndoing(false);
+    }
+  };
+
+  const openAudit = async () => {
+    setShowAudit(true);
+    setAuditLoading(true);
+    try {
+      const { data } = await api.get('/api/audit-logs');
+      setAuditRows(data.data || []);
+    } catch {
+      setAuditRows([]);
+    } finally {
+      setAuditLoading(false);
+    }
+  };
 
   return (
     <div className="att-page">
@@ -91,6 +123,7 @@ export default function AttendancePage() {
           <h1 className="att-title">✅ Checked-In Attendees</h1>
           <p className="att-sub">Live attendance — updates automatically as tickets are scanned.</p>
         </div>
+        <button className="att-audit-btn" onClick={openAudit}>📋 Audit Log</button>
       </div>
 
       {/* Stats */}
@@ -136,14 +169,15 @@ export default function AttendancePage() {
               <th>Ticket ID</th>
               <th>Check-In Time</th>
               <th>Status</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {loading && rows.length === 0 && (
-              <tr><td colSpan={5} className="att-empty">Loading…</td></tr>
+              <tr><td colSpan={6} className="att-empty">Loading…</td></tr>
             )}
             {!loading && rows.length === 0 && (
-              <tr><td colSpan={5} className="att-empty">No attendees match these filters.</td></tr>
+              <tr><td colSpan={6} className="att-empty">No attendees match these filters.</td></tr>
             )}
             {rows.map(r => (
               <tr key={r._id}>
@@ -161,11 +195,118 @@ export default function AttendancePage() {
                     {r.checkInStatus ? 'Checked in' : 'Pending'}
                   </span>
                 </td>
+                <td>
+                  <div className="att-actions">
+                    <button className="att-act att-act-view" onClick={() => setDetailRow(r)}>View</button>
+                    {r.checkInStatus && (
+                      <button className="att-act att-act-undo" onClick={() => { setUndoRow(r); setUndoReason(''); }}>
+                        Undo
+                      </button>
+                    )}
+                  </div>
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+
+      {/* View Details modal */}
+      {detailRow && (
+        <div className="att-modal-overlay" onClick={() => setDetailRow(null)}>
+          <div className="att-modal" onClick={e => e.stopPropagation()}>
+            <div className="att-modal-head">
+              <h3>Attendee Details</h3>
+              <button className="att-modal-x" onClick={() => setDetailRow(null)}>✕</button>
+            </div>
+            <div className="att-detail-grid">
+              <div><span>Name</span><strong>{detailRow.user?.name || '—'}</strong></div>
+              <div><span>Email</span><strong>{detailRow.user?.email || '—'}</strong></div>
+              <div><span>Role</span><strong>{detailRow.user?.role || '—'}</strong></div>
+              <div><span>Company</span><strong>{detailRow.user?.company || '—'}</strong></div>
+              <div><span>Event</span><strong>{detailRow.expo?.title || '—'}</strong></div>
+              <div><span>Ticket ID</span><strong>{detailRow._id.slice(-8).toUpperCase()}</strong></div>
+              <div><span>Registered</span><strong>{detailRow.createdAt ? dayjs(detailRow.createdAt).format('MMM D, YYYY h:mm A') : '—'}</strong></div>
+              <div><span>Check-In Time</span><strong>{detailRow.checkInTime ? dayjs(detailRow.checkInTime).format('MMM D, YYYY h:mm:ss A') : '—'}</strong></div>
+              <div><span>Status</span><strong>{detailRow.checkInStatus ? 'Checked in' : 'Pending'}</strong></div>
+            </div>
+            <div className="att-modal-foot">
+              {detailRow.checkInStatus && (
+                <button className="att-act att-act-undo" onClick={() => { setUndoRow(detailRow); setUndoReason(''); setDetailRow(null); }}>
+                  Undo Check-In
+                </button>
+              )}
+              <button className="att-btn-ghost" onClick={() => setDetailRow(null)}>Close</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Undo confirmation modal */}
+      {undoRow && (
+        <div className="att-modal-overlay" onClick={() => !undoing && setUndoRow(null)}>
+          <div className="att-modal" onClick={e => e.stopPropagation()}>
+            <div className="att-modal-head">
+              <h3>Undo Check-In</h3>
+              <button className="att-modal-x" onClick={() => !undoing && setUndoRow(null)}>✕</button>
+            </div>
+            <p className="att-confirm-text">
+              Are you sure you want to undo <strong>{undoRow.user?.name}</strong>'s check-in?
+              They'll move back to the Registered list; their data is kept and this action is logged.
+            </p>
+            <label className="att-reason-label">Reason (optional)</label>
+            <textarea
+              className="att-reason"
+              rows={3}
+              placeholder="e.g. scanned the wrong attendee"
+              value={undoReason}
+              onChange={e => setUndoReason(e.target.value)}
+            />
+            <div className="att-modal-foot">
+              <button className="att-btn-ghost" onClick={() => setUndoRow(null)} disabled={undoing}>Cancel</button>
+              <button className="att-btn-danger" onClick={confirmUndo} disabled={undoing}>
+                {undoing ? 'Undoing…' : 'Undo Check-In'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Audit log modal */}
+      {showAudit && (
+        <div className="att-modal-overlay" onClick={() => setShowAudit(false)}>
+          <div className="att-modal att-modal-wide" onClick={e => e.stopPropagation()}>
+            <div className="att-modal-head">
+              <h3>Check-In Audit Log</h3>
+              <button className="att-modal-x" onClick={() => setShowAudit(false)}>✕</button>
+            </div>
+            <div className="att-audit-wrap">
+              <table className="att-table">
+                <thead>
+                  <tr><th>When</th><th>Action</th><th>Attendee</th><th>Event</th><th>By</th><th>Reason</th></tr>
+                </thead>
+                <tbody>
+                  {auditLoading && <tr><td colSpan={6} className="att-empty">Loading…</td></tr>}
+                  {!auditLoading && auditRows.length === 0 && <tr><td colSpan={6} className="att-empty">No audit entries yet.</td></tr>}
+                  {auditRows.map(a => (
+                    <tr key={a._id}>
+                      <td>{dayjs(a.createdAt).format('MMM D, h:mm A')}</td>
+                      <td><span className="att-badge att-badge-undo">{a.action}</span></td>
+                      <td>{a.attendeeName || '—'}</td>
+                      <td>{a.event?.title || '—'}</td>
+                      <td>{a.adminName || '—'}</td>
+                      <td>{a.reason || '—'}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <div className="att-modal-foot">
+              <button className="att-btn-ghost" onClick={() => setShowAudit(false)}>Close</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

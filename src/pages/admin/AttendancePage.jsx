@@ -38,7 +38,8 @@ export default function AttendancePage() {
 
   // Load the expo list once for the filter dropdown.
   useEffect(() => {
-    api.get('/api/expos')
+    // limit=100 (server max) so the filter lists all expos, not just the first page.
+    api.get('/api/expos?limit=100')
       .then(({ data }) => setExpos(data.data || []))
       .catch(() => {});
   }, []);

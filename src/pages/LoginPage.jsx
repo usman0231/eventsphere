@@ -97,10 +97,13 @@ export default function LoginPage() {
           )}
           <form onSubmit={handleSubmit} className="auth-form">
             <div className="form-group">
-              <label className="form-label">Email Address</label>
+              <label className="form-label" htmlFor="login-email">Email Address</label>
               <div className="input-wrap">
                 <span className="input-icon">✉️</span>
                 <input
+                  id="login-email"
+                  name="email"
+                  autoComplete="email"
                   className="form-input"
                   type="email"
                   placeholder="you@example.com"
@@ -111,10 +114,13 @@ export default function LoginPage() {
               </div>
             </div>
             <div className="form-group">
-              <label className="form-label">Password</label>
+              <label className="form-label" htmlFor="login-password">Password</label>
               <div className="input-wrap">
                 <span className="input-icon">🔒</span>
                 <input
+                  id="login-password"
+                  name="password"
+                  autoComplete="current-password"
                   className="form-input"
                   type={showPwd ? 'text' : 'password'}
                   placeholder="Your password"

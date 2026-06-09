@@ -22,6 +22,23 @@ export default function ExpoDetailPage() {
   const [tab, setTab] = useState('sessions');
   const [error, setError] = useState('');
   const [showQR, setShowQR] = useState(false);
+  const [registration, setRegistration] = useState(null);
+  const [gettingTicket, setGettingTicket] = useState(false);
+
+  // Register the current user for this expo (idempotent) and open their ticket.
+  const handleGetTicket = async () => {
+    setGettingTicket(true);
+    try {
+      const { data } = await api.post('/api/registrations', { expoId: id });
+      setRegistration(data.registration);
+      if (data.created) toast.success("You're registered — here's your ticket 🎫");
+      setShowQR(true);
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Could not get your ticket');
+    } finally {
+      setGettingTicket(false);
+    }
+  };
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => { fetchData(); }, [id]);
@@ -146,8 +163,8 @@ export default function ExpoDetailPage() {
             )}
             <div className="ed-organizer-actions">
               {user && (
-                <button className="ed-action-btn ed-btn-ticket" onClick={() => setShowQR(true)}>
-                  🎫 Get My Ticket
+                <button className="ed-action-btn ed-btn-ticket" onClick={handleGetTicket} disabled={gettingTicket}>
+                  {gettingTicket ? '⏳ Loading…' : '🎫 Get My Ticket'}
                 </button>
               )}
               {!user && (
@@ -322,7 +339,7 @@ export default function ExpoDetailPage() {
           </div>
         )}
       </div>
-      {showQR && <QRTicket user={user} expo={expo} onClose={() => setShowQR(false)} />}
+      {showQR && <QRTicket user={user} expo={expo} registration={registration} onClose={() => setShowQR(false)} />}
     </div>
   );
 }

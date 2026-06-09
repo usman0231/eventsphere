@@ -127,6 +127,45 @@
   text-align: center;
 }
 
+/* Manual entry fallback (no camera) */
+.ci-manual {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+.ci-manual-label {
+  display: block;
+  font-size: 0.78rem;
+  color: rgba(240, 240, 255, 0.5);
+  margin-bottom: 8px;
+}
+.ci-manual-row { display: flex; gap: 8px; }
+.ci-manual-input {
+  flex: 1;
+  min-width: 0;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  padding: 9px 12px;
+  color: #e8e8f0;
+  font-size: 0.85rem;
+  font-family: monospace;
+  outline: none;
+}
+.ci-manual-input:focus { border-color: rgba(123, 47, 247, 0.6); }
+.ci-manual-btn {
+  background: linear-gradient(135deg, #6c3de8, #e83d8a);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 9px 16px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.ci-manual-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
 /* Result */
 .ci-result-wrap {
   display: flex;

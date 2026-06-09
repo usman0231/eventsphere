@@ -1,17 +1,15 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 
-export default function QRTicket({ user, expo, onClose }) {
+export default function QRTicket({ user, expo, registration, onClose }) {
   const ticketRef = useRef(null);
   const qrWrapRef = useRef(null);
+  const [copied, setCopied] = useState(false);
 
-  const ticketData = JSON.stringify({
-    userId: user?._id,
-    expoId: expo?._id,
-    name: user?.name,
-    expo: expo?.title,
-    timestamp: Date.now()
-  });
+  // The QR encodes the signed registration token (v2). Check-in verifies the
+  // signature server-side, so the code can't be forged.
+  const ticketData = JSON.stringify({ v: 2, t: registration?.qrToken });
+  const ticketId = (registration?._id || user?._id || '').slice(-8).toUpperCase();
 
   const safeFilename = (s) =>
     (s || 'eventsphere-ticket')
@@ -52,6 +50,18 @@ export default function QRTicket({ user, expo, onClose }) {
       }, 'image/png');
     };
     img.src = svg64;
+  };
+
+  // Copy the raw ticket payload — handy for the check-in page's manual entry
+  // (no camera needed) and for debugging.
+  const copyTicketData = async () => {
+    try {
+      await navigator.clipboard.writeText(ticketData);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      /* clipboard blocked — ignore */
+    }
   };
 
   const handlePrint = () => {
@@ -102,7 +112,7 @@ export default function QRTicket({ user, expo, onClose }) {
             />
           </div>
           <div className="qr-ticket-id">
-            ID: {user?._id?.slice(-8)?.toUpperCase()}
+            ID: {ticketId}
           </div>
           <div className="qr-ticket-valid">
             ✅ Valid for entry — Show this at the venue
@@ -111,6 +121,7 @@ export default function QRTicket({ user, expo, onClose }) {
         <div className="qr-actions">
           <button className="qr-download-btn" onClick={downloadQR}>⬇️ Download QR</button>
           <button className="qr-print-btn" onClick={handlePrint}>🖨️ Print</button>
+          <button className="qr-print-btn" onClick={copyTicketData}>{copied ? '✅ Copied' : '📋 Copy data'}</button>
           <button className="qr-close-btn" onClick={onClose}>Close</button>
         </div>
       </div>

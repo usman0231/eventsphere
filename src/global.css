@@ -21,6 +21,7 @@
 @import "./components/experience/ExperiencePage.css";
 @import "./pages/AboutPage.css";
 @import "./pages/AdminPage.css";
+@import "./pages/admin/AttendancePage.css";
 @import "./pages/AuthPages.css";
 @import "./pages/BlogPage.css";
 @import "./pages/BoothManagementPage.css";

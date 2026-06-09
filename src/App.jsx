@@ -34,6 +34,7 @@ const AdminFeedbackPage = lazy(() => import('./pages/admin/AdminFeedbackPage'));
 const AdminAnnouncePage = lazy(() => import('./pages/admin/AdminAnnouncePage'));
 const AdminActivityPage = lazy(() => import('./pages/admin/AdminActivityPage'));
 const CheckInPage = lazy(() => import('./pages/CheckInPage'));
+const AttendancePage = lazy(() => import('./pages/admin/AttendancePage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 const AboutPage = lazy(() => import('./pages/AboutPage'));
 const ServicesPage = lazy(() => import('./pages/ServicesPage'));
@@ -96,6 +97,7 @@ function AppRoutes() {
       >
         <Route index element={<AdminDashboardPage />} />
         <Route path="checkin" element={<ProtectedRoute roles={['admin','organizer']}><CheckInPage /></ProtectedRoute>} />
+        <Route path="attendance" element={<ProtectedRoute roles={['admin','organizer']}><AttendancePage /></ProtectedRoute>} />
         <Route path="messages" element={<MessagesPage />} />
         <Route path="users" element={<ProtectedRoute roles={['admin']}><AdminUsersPage /></ProtectedRoute>} />
         <Route path="feedback" element={<ProtectedRoute roles={['admin']}><AdminFeedbackPage /></ProtectedRoute>} />

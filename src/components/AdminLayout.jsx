@@ -8,6 +8,7 @@ import Logo from './Logo';
 const NAV = [
   { to: '/dashboard', label: 'Dashboard', icon: '📊', end: true },
   { to: '/dashboard/checkin', label: 'Check-In', icon: '🎟️', roles: ['admin', 'organizer'] },
+  { to: '/dashboard/attendance', label: 'Attendance', icon: '✅', roles: ['admin', 'organizer'] },
   { to: '/dashboard/messages', label: 'Messages', icon: '✉️' },
   { to: '/dashboard/users', label: 'Users', icon: '👥', roles: ['admin'] },
   { to: '/dashboard/feedback', label: 'Feedback', icon: '💬', roles: ['admin'] },

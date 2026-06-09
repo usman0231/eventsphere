@@ -9,10 +9,29 @@ export default function CheckInPage() {
   const [lastResult, setLastResult] = useState(null);
   const [recent, setRecent] = useState([]);
   const [error, setError] = useState('');
+  const [manual, setManual] = useState('');
+  const [submitting, setSubmitting] = useState(false);
   const lastPayloadRef = useRef('');
   const cooldownRef = useRef(false);
 
   useEffect(() => () => { cooldownRef.current = false; }, []);
+
+  // Shared validation path used by both the camera scanner and manual entry.
+  const processTicket = async (raw) => {
+    setError('');
+    try {
+      const { data } = await api.post('/api/checkin', { ticketData: raw });
+      setLastResult(data);
+      setRecent(prev => [data, ...prev].slice(0, 8));
+      if (data.alreadyCheckedIn) toast.info(data.message);
+      else toast.success(data.message);
+    } catch (err) {
+      const msg = err.response?.data?.message || 'Failed to validate ticket';
+      setError(msg);
+      setLastResult({ valid: false, message: msg });
+      toast.error(msg);
+    }
+  };
 
   const handleScan = async (detected) => {
     if (cooldownRef.current) return;
@@ -22,28 +41,20 @@ export default function CheckInPage() {
     if (raw === lastPayloadRef.current) return;
     lastPayloadRef.current = raw;
     cooldownRef.current = true;
-    setError('');
+    await processTicket(raw);
+    setTimeout(() => {
+      cooldownRef.current = false;
+      lastPayloadRef.current = '';
+    }, 2500);
+  };
 
-    try {
-      const { data } = await api.post('/api/checkin', { ticketData: raw });
-      setLastResult(data);
-      setRecent(prev => [data, ...prev].slice(0, 8));
-      if (data.alreadyCheckedIn) {
-        toast.info(data.message);
-      } else {
-        toast.success(data.message);
-      }
-    } catch (err) {
-      const msg = err.response?.data?.message || 'Failed to validate ticket';
-      setError(msg);
-      setLastResult({ valid: false, message: msg });
-      toast.error(msg);
-    } finally {
-      setTimeout(() => {
-        cooldownRef.current = false;
-        lastPayloadRef.current = '';
-      }, 2500);
-    }
+  // Manual fallback — paste the ticket data (works without a camera).
+  const handleManual = async (e) => {
+    e.preventDefault();
+    if (!manual.trim() || submitting) return;
+    setSubmitting(true);
+    await processTicket(manual.trim());
+    setSubmitting(false);
   };
 
   const handleError = (err) => {
@@ -101,6 +112,23 @@ export default function CheckInPage() {
             <p className="ci-hint">
               📱 Allow camera access when prompted. The scanner reads QR tickets generated from the Expo Detail page.
             </p>
+
+            {/* Manual fallback — no camera needed. Paste the ticket data from a ticket. */}
+            <form className="ci-manual" onSubmit={handleManual}>
+              <label className="ci-manual-label">No camera? Paste ticket data:</label>
+              <div className="ci-manual-row">
+                <input
+                  className="ci-manual-input"
+                  type="text"
+                  placeholder='{"v":2,"t":"…"}'
+                  value={manual}
+                  onChange={e => setManual(e.target.value)}
+                />
+                <button className="ci-manual-btn" type="submit" disabled={submitting || !manual.trim()}>
+                  {submitting ? '…' : 'Validate'}
+                </button>
+              </div>
+            </form>
           </div>
 
           {/* Result card */}

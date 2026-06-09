@@ -12,20 +12,39 @@ export default function InstallPrompt() {
 
     if (localStorage.getItem('es_install_dismissed') === '1') return;
 
-    const onBeforeInstall = (e) => {
-      e.preventDefault();
-      setDeferred(e);
-      setVisible(true);
+    // The `beforeinstallprompt` event is captured early in _document (before React
+    // mounts), so by the time we get here it may already be waiting on window.
+    // Pick it up if so, and also listen for it firing later this session.
+    const show = () => {
+      if (window.deferredInstallPrompt) {
+        setDeferred(window.deferredInstallPrompt);
+        setVisible(true);
+      }
+    };
+
+    show();
+
+    // `es-installable` is re-broadcast by the early capture script; we also listen
+    // for the native event directly in case this mounts before it fires.
+    const onCaptured = (e) => {
+      if (e && e.preventDefault) {
+        e.preventDefault();
+        window.deferredInstallPrompt = e;
+      }
+      show();
     };
     const onInstalled = () => {
+      window.deferredInstallPrompt = null;
       setVisible(false);
       setDeferred(null);
     };
 
-    window.addEventListener('beforeinstallprompt', onBeforeInstall);
+    window.addEventListener('es-installable', onCaptured);
+    window.addEventListener('beforeinstallprompt', onCaptured);
     window.addEventListener('appinstalled', onInstalled);
     return () => {
-      window.removeEventListener('beforeinstallprompt', onBeforeInstall);
+      window.removeEventListener('es-installable', onCaptured);
+      window.removeEventListener('beforeinstallprompt', onCaptured);
       window.removeEventListener('appinstalled', onInstalled);
     };
   }, []);
@@ -43,6 +62,7 @@ export default function InstallPrompt() {
     if (!deferred) return;
     deferred.prompt();
     await deferred.userChoice;
+    window.deferredInstallPrompt = null;
     setDeferred(null);
     setVisible(false);
   };

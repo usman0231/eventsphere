@@ -5,8 +5,8 @@ const nextConfig = {
   reactStrictMode: false,
   // CRA had its own lint pipeline; don't fail production builds on lint.
   eslint: { ignoreDuringBuilds: true },
-  // Never cache the (kill-switch) service worker, so browsers that still have the old
-  // CRA service worker fetch the self-unregistering one immediately on their update check.
+  // Never cache the service worker itself, so browsers always fetch the latest
+  // version on their update check (and pick up SW changes immediately).
   async headers() {
     return [
       {

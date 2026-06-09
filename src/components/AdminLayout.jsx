@@ -16,8 +16,8 @@ const NAV = [
 ];
 
 // Back-office shell for the admin area. Deliberately does NOT include the public
-// marketing chrome (MegaMenu nav, Chatbot, InstallPrompt) — when you're in /admin
-// you only see admin content.
+// marketing chrome (MegaMenu nav, Chatbot) — when you're in /admin you only see
+// admin content. (InstallPrompt is rendered globally in pages/_app.jsx instead.)
 export default function AdminLayout() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();

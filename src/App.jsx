@@ -5,41 +5,44 @@ import { AuthProvider, useAuth, homePathForRole } from './context/AuthContext';
 import { SocketProvider } from './context/SocketContext';
 import Layout from './components/Layout';
 import AdminLayout from './components/AdminLayout';
-import HomePage from './pages/HomePage';
-import LoginPage from './pages/LoginPage';
-import RegisterPage from './pages/RegisterPage';
-import ForgotPasswordPage from './pages/ForgotPasswordPage';
-import ResetPasswordPage from './pages/ResetPasswordPage';
-import VerifyEmailPage from './pages/VerifyEmailPage';
-import ResendVerificationPage from './pages/ResendVerificationPage';
-import ExposPage from './pages/ExposPage';
-import CreateExpoPage from './pages/CreateExpoPage';
-import ProfilePage from './pages/ProfilePage';
-import ExhibitorPortalPage from './pages/ExhibitorPortalPage';
-import BoothManagementPage from './pages/BoothManagementPage';
-import PublicFloorPage from './pages/PublicFloorPage';
-import SessionsPage from './pages/SessionsPage';
-import SponsorsPage from './pages/SponsorsPage';
-import MessagesPage from './pages/MessagesPage';
-import FeedbackPage from './pages/FeedbackPage';
-import AdminUsersPage from './pages/admin/AdminUsersPage';
-import AdminFeedbackPage from './pages/admin/AdminFeedbackPage';
-import AdminAnnouncePage from './pages/admin/AdminAnnouncePage';
-import AdminActivityPage from './pages/admin/AdminActivityPage';
-import CheckInPage from './pages/CheckInPage';
-import NotFoundPage from './pages/NotFoundPage';
-import AboutPage from './pages/AboutPage';
-import ServicesPage from './pages/ServicesPage';
-import ContactPage from './pages/ContactPage';
-import FAQPage from './pages/FAQPage';
-import BlogPage from './pages/BlogPage';
 import LoadingScreen from './components/LoadingScreen';
 import SmoothScroll from './components/SmoothScroll';
 
-// Heavy 3D experience — lazy load so it doesn't bloat the main bundle
+// Every page is lazy-loaded so the initial bundle only carries the app shell
+// (router, layouts, auth) plus whichever page the user actually lands on.
+// React Router + the <Suspense> below stream each page's chunk on demand,
+// which keeps first load — especially the login-first entry — small and fast.
+const HomePage = lazy(() => import('./pages/HomePage'));
+const LoginPage = lazy(() => import('./pages/LoginPage'));
+const RegisterPage = lazy(() => import('./pages/RegisterPage'));
+const ForgotPasswordPage = lazy(() => import('./pages/ForgotPasswordPage'));
+const ResetPasswordPage = lazy(() => import('./pages/ResetPasswordPage'));
+const VerifyEmailPage = lazy(() => import('./pages/VerifyEmailPage'));
+const ResendVerificationPage = lazy(() => import('./pages/ResendVerificationPage'));
+const ExposPage = lazy(() => import('./pages/ExposPage'));
+const CreateExpoPage = lazy(() => import('./pages/CreateExpoPage'));
+const ProfilePage = lazy(() => import('./pages/ProfilePage'));
+const ExhibitorPortalPage = lazy(() => import('./pages/ExhibitorPortalPage'));
+const BoothManagementPage = lazy(() => import('./pages/BoothManagementPage'));
+const PublicFloorPage = lazy(() => import('./pages/PublicFloorPage'));
+const SessionsPage = lazy(() => import('./pages/SessionsPage'));
+const SponsorsPage = lazy(() => import('./pages/SponsorsPage'));
+const MessagesPage = lazy(() => import('./pages/MessagesPage'));
+const FeedbackPage = lazy(() => import('./pages/FeedbackPage'));
+const AdminUsersPage = lazy(() => import('./pages/admin/AdminUsersPage'));
+const AdminFeedbackPage = lazy(() => import('./pages/admin/AdminFeedbackPage'));
+const AdminAnnouncePage = lazy(() => import('./pages/admin/AdminAnnouncePage'));
+const AdminActivityPage = lazy(() => import('./pages/admin/AdminActivityPage'));
+const CheckInPage = lazy(() => import('./pages/CheckInPage'));
+const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
+const AboutPage = lazy(() => import('./pages/AboutPage'));
+const ServicesPage = lazy(() => import('./pages/ServicesPage'));
+const ContactPage = lazy(() => import('./pages/ContactPage'));
+const FAQPage = lazy(() => import('./pages/FAQPage'));
+const BlogPage = lazy(() => import('./pages/BlogPage'));
+// Heavy 3D experience (three.js), chart-heavy dashboard (chart.js) and map-heavy
+// expo detail (leaflet) — already split so those libs never touch the main bundle.
 const ExperiencePage = lazy(() => import('./pages/ExperiencePage'));
-// Lazy-load the chart-heavy dashboard (chart.js) and map-heavy expo detail (leaflet)
-// so those libraries split into their own chunks instead of the main bundle.
 const AdminDashboardPage = lazy(() => import('./pages/admin/AdminDashboardPage'));
 const ExpoDetailPage = lazy(() => import('./pages/ExpoDetailPage'));
 

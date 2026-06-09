@@ -3,7 +3,6 @@ import { Outlet, useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import NotificationBell from './NotificationBell';
 import Chatbot from './Chatbot';
-import InstallPrompt from './InstallPrompt';
 import MegaMenu from './MegaMenu';
 import Logo from './Logo';
 
@@ -185,8 +184,7 @@ export default function Layout() {
         <Outlet />
       </main>
 
-      <Chatbot />
-      <InstallPrompt />
+      {!hideNav && <Chatbot />}
     </div>
   );
 }

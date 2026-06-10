@@ -16,6 +16,8 @@ export default function Layout() {
 
   const isHome = location.pathname === '/';
   const hideNav = location.pathname === '/login';
+  const hideChatbot =
+    location.pathname === '/login' || location.pathname === '/register';
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60);
@@ -184,7 +186,7 @@ export default function Layout() {
         <Outlet />
       </main>
 
-      {!hideNav && <Chatbot />}
+      {!hideChatbot && <Chatbot />}
     </div>
   );
 }

@@ -15,7 +15,8 @@ export default function Layout() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const isHome = location.pathname === '/';
-  const hideNav = location.pathname === '/login';
+  const hideNav =
+    location.pathname === '/login' || location.pathname === '/register';
   const hideChatbot =
     location.pathname === '/login' || location.pathname === '/register';
 
@@ -103,12 +104,6 @@ export default function Layout() {
           {user && user.role !== 'attendee' && (
             <li>
               <Link to="/dashboard">Dashboard</Link>
-            </li>
-          )}
-
-          {user && isOrganizer && (
-            <li>
-              <Link to="/expos/create">Create Expo</Link>
             </li>
           )}
 

@@ -10,7 +10,14 @@ export default function InstallPrompt() {
       window.navigator.standalone === true;
     if (isStandalone) return;
 
-    if (localStorage.getItem('es_install_dismissed') === '1') return;
+    // "Not now" snoozes the prompt for 7 days rather than forever, so it can
+    // resurface later. (Stored as a timestamp; the legacy '1' value is treated
+    // as a recent dismissal and ages out within the window.)
+    const dismissedRaw = localStorage.getItem('es_install_dismissed');
+    if (dismissedRaw) {
+      const dismissedAt = dismissedRaw === '1' ? Date.now() : Number(dismissedRaw);
+      if (dismissedAt && Date.now() - dismissedAt < 7 * 24 * 60 * 60 * 1000) return;
+    }
 
     // The `beforeinstallprompt` event is captured early in _document (before React
     // mounts), so by the time we get here it may already be waiting on window.
@@ -68,7 +75,7 @@ export default function InstallPrompt() {
   };
 
   const handleDismiss = () => {
-    localStorage.setItem('es_install_dismissed', '1');
+    localStorage.setItem('es_install_dismissed', String(Date.now()));
     setVisible(false);
   };
 

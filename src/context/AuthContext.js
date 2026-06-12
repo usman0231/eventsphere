@@ -15,7 +15,11 @@ axios.defaults.baseURL = process.env.NEXT_PUBLIC_API_URL || '';
 
 // Where a user lands after auth, by role.
 // Attendees use the public frontend (no back-office dashboard); everyone else gets the dashboard.
-export const homePathForRole = (role) => (role === 'attendee' ? '/home' : '/dashboard');
+export const homePathForRole = (role) =>
+  role === 'attendee' ? '/home'
+    : role === 'exhibitor' ? '/exhibitor'
+    : role === 'organizer' ? '/organizer'
+    : '/dashboard';
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);

@@ -114,6 +114,15 @@ export default function QRTicket({ user, expo, registration, onClose }) {
           <div className="qr-ticket-id">
             ID: {ticketId}
           </div>
+          {registration?.payment && registration.payment.entryFee > 0 && (
+            registration.payment.balanceDue > 0 ? (
+              <div className="qr-ticket-balance">
+                💵 Paid ${registration.payment.amountPaid.toFixed(2)} · Balance ${registration.payment.balanceDue.toFixed(2)} due at venue
+              </div>
+            ) : (
+              <div className="qr-ticket-paid">✅ Paid in full — ${registration.payment.amountPaid.toFixed(2)}</div>
+            )
+          )}
           <div className="qr-ticket-valid">
             ✅ Valid for entry — Show this at the venue
           </div>

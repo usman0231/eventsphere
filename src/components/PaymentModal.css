@@ -1,0 +1,115 @@
+.pay-overlay {
+  position:fixed; inset:0; z-index:2100;
+  background:rgba(0,0,0,0.8); backdrop-filter:blur(10px);
+  display:flex; align-items:center; justify-content:center; padding:24px;
+}
+
+.pay-modal {
+  background:#0f0f2a; border:1px solid rgba(123,47,247,0.35);
+  border-radius:24px; width:100%; max-width:440px;
+  box-shadow:0 40px 100px rgba(0,0,0,0.6);
+  overflow:hidden;
+  animation:pay-enter 0.3s cubic-bezier(0.175,0.885,0.32,1.275);
+}
+
+@keyframes pay-enter {
+  from { opacity:0; transform:scale(0.8); }
+  to { opacity:1; transform:scale(1); }
+}
+
+.pay-header {
+  display:flex; justify-content:space-between; align-items:center;
+  padding:20px 24px; border-bottom:1px solid rgba(255,255,255,0.06);
+}
+.pay-header h3 { font-family:'Playfair Display',serif; font-size:1.1rem; font-weight:800; color:#f0f0ff; }
+.pay-close { background:none; border:none; color:rgba(240,240,255,0.4); font-size:1.1rem; cursor:pointer; }
+.pay-close:disabled { opacity:0.3; cursor:not-allowed; }
+
+.pay-summary {
+  padding:20px 24px;
+  background:linear-gradient(135deg,rgba(123,47,247,0.08),rgba(255,0,110,0.05));
+  border-bottom:1px solid rgba(255,255,255,0.06);
+}
+.pay-summary-event { display:block; font-family:'Playfair Display',serif; font-size:1.05rem; font-weight:800; color:#f0f0ff; margin-bottom:12px; }
+.pay-summary-row { display:flex; justify-content:space-between; align-items:center; font-size:0.9rem; color:rgba(240,240,255,0.6); }
+.pay-summary-amount { font-size:1.2rem; font-weight:800; color:#00ff88; }
+
+.pay-form { padding:22px 24px; }
+
+.pay-error {
+  background:rgba(255,0,110,0.1); border:1px solid rgba(255,0,110,0.3);
+  color:#ff7aa8; font-size:0.85rem; padding:10px 14px; border-radius:12px; margin-bottom:16px;
+}
+
+/* Full vs deposit choice */
+.pay-options { display:flex; gap:12px; margin-bottom:18px; }
+.pay-option {
+  flex:1; display:flex; flex-direction:column; gap:4px; text-align:left;
+  padding:12px 14px; border-radius:14px; cursor:pointer;
+  background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.1);
+  color:#f0f0ff; font-family:'DM Sans',sans-serif; transition:all 0.2s;
+}
+.pay-option:hover:not(:disabled) { border-color:rgba(123,47,247,0.5); }
+.pay-option.active { border-color:rgba(123,47,247,0.9); background:rgba(123,47,247,0.12); }
+.pay-option:disabled { cursor:not-allowed; }
+.pay-option-title { font-size:0.92rem; font-weight:700; }
+.pay-option-sub { font-size:0.76rem; color:rgba(240,240,255,0.5); }
+
+.pay-deposit { margin-bottom:16px; }
+
+.pay-quick { display:flex; gap:8px; margin:-6px 0 14px; }
+.pay-quick-btn {
+  flex:1; padding:8px; border-radius:10px; cursor:pointer;
+  background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.1);
+  color:rgba(240,240,255,0.7); font-size:0.8rem; font-weight:600;
+  font-family:'DM Sans',sans-serif; transition:all 0.2s;
+}
+.pay-quick-btn:hover:not(:disabled) { border-color:rgba(123,47,247,0.6); color:#f0f0ff; }
+
+.pay-balance {
+  display:flex; justify-content:space-between; align-items:center;
+  padding:12px 14px; border-radius:12px;
+  background:rgba(255,179,0,0.08); border:1px solid rgba(255,179,0,0.25);
+  font-size:0.85rem; color:rgba(240,240,255,0.7);
+}
+.pay-balance-amount { font-size:1.05rem; font-weight:800; color:#ffb300; }
+
+.pay-label { display:block; font-size:0.78rem; font-weight:600; color:rgba(240,240,255,0.5); margin:0 0 6px 2px; }
+
+.pay-input {
+  width:100%; box-sizing:border-box; padding:12px 14px; margin-bottom:16px;
+  background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.1);
+  border-radius:12px; color:#f0f0ff; font-size:0.95rem; font-family:'DM Sans',sans-serif;
+  transition:border-color 0.2s;
+}
+.pay-input:focus { outline:none; border-color:rgba(123,47,247,0.6); }
+.pay-input::placeholder { color:rgba(240,240,255,0.25); }
+.pay-input:disabled { opacity:0.5; }
+
+.pay-row { display:flex; gap:12px; }
+
+.pay-stripe-input {
+  padding:13px 14px; margin-bottom:16px;
+  background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.1);
+  border-radius:12px;
+}
+.pay-stripe-input .StripeElement--focus { /* Stripe handles focus internally */ }
+
+.pay-submit {
+  width:100%; padding:14px; margin-top:4px; border-radius:50px; border:none;
+  background:linear-gradient(135deg,#6c3de8,#e83d8a);
+  color:white; font-size:0.95rem; font-weight:700;
+  font-family:'DM Sans',sans-serif; cursor:pointer; transition:all 0.3s;
+  display:flex; align-items:center; justify-content:center; min-height:48px;
+}
+.pay-submit:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 8px 25px rgba(123,47,247,0.4); }
+.pay-submit:disabled { opacity:0.7; cursor:not-allowed; }
+
+.pay-spinner {
+  width:18px; height:18px; border-radius:50%;
+  border:2px solid rgba(255,255,255,0.3); border-top-color:#fff;
+  animation:pay-spin 0.7s linear infinite;
+}
+@keyframes pay-spin { to { transform:rotate(360deg); } }
+
+.pay-note { text-align:center; font-size:0.75rem; color:rgba(240,240,255,0.35); margin-top:14px; }

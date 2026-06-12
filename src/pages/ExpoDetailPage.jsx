@@ -7,6 +7,7 @@ import dayjs from 'dayjs';
 import { downloadCSV, dateStamp } from '../utils/export';
 import { downloadICS, googleCalendarURL } from '../utils/calendar';
 import QRTicket from '../components/QRTicket';
+import PaymentModal from '../components/PaymentModal';
 import ExpoReviews from '../components/ExpoReviews';
 import VenueMap from '../components/VenueMap';
 
@@ -22,16 +23,30 @@ export default function ExpoDetailPage() {
   const [tab, setTab] = useState('sessions');
   const [error, setError] = useState('');
   const [showQR, setShowQR] = useState(false);
+  const [showPayment, setShowPayment] = useState(false);
   const [registration, setRegistration] = useState(null);
   const [gettingTicket, setGettingTicket] = useState(false);
 
-  // Register the current user for this expo (idempotent) and open their ticket.
-  const handleGetTicket = async () => {
+  // Step 1: clicking "Get My Ticket" opens the payment step first.
+  const handleGetTicket = () => setShowPayment(true);
+
+  // Step 2: after a successful (mock) payment, register the user for this expo
+  // (idempotent) and open their ticket. The payment split is sent along so the
+  // balance due at the venue is recorded on the registration.
+  const handlePaymentSuccess = async (payment) => {
+    setShowPayment(false);
     setGettingTicket(true);
     try {
-      const { data } = await api.post('/api/registrations', { expoId: id });
+      const { data } = await api.post('/api/registrations', { expoId: id, payment });
       setRegistration(data.registration);
-      if (data.created) toast.success("You're registered — here's your ticket 🎫");
+      const balance = data.registration?.payment?.balanceDue || 0;
+      if (data.created) {
+        toast.success(balance > 0
+          ? `Deposit received — $${balance.toFixed(2)} due at the venue 🎫`
+          : "Payment successful — here's your ticket 🎫");
+      } else {
+        toast.success('Welcome back — here is your ticket 🎫');
+      }
       setShowQR(true);
     } catch (err) {
       toast.error(err.response?.data?.message || 'Could not get your ticket');
@@ -339,6 +354,14 @@ export default function ExpoDetailPage() {
           </div>
         )}
       </div>
+      {showPayment && (
+        <PaymentModal
+          expo={expo}
+          amount={expo.entryFee || 0}
+          onClose={() => setShowPayment(false)}
+          onSuccess={handlePaymentSuccess}
+        />
+      )}
       {showQR && <QRTicket user={user} expo={expo} registration={registration} onClose={() => setShowQR(false)} />}
     </div>
   );

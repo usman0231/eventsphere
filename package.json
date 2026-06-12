@@ -12,7 +12,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "seed": "node lib/server/seed.js"
+    "seed": "node lib/server/seed.js",
+    "seed:samples": "node scripts/seed-samples.js"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.97.1",
@@ -25,6 +26,8 @@
     "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.6.1",
     "@react-three/postprocessing": "^3.0.4",
+    "@stripe/react-stripe-js": "^6.6.0",
+    "@stripe/stripe-js": "^9.8.0",
     "@yudiel/react-qr-scanner": "^2.6.0",
     "axios": "^1.16.1",
     "bcryptjs": "^3.0.3",
@@ -59,6 +62,7 @@
     "react-to-print": "^3.3.0",
     "react-toastify": "^11.1.0",
     "socket.io-client": "^4.8.3",
+    "stripe": "^22.2.0",
     "three": "^0.184.0"
   }
 }

@@ -229,19 +229,22 @@ export default function HomePage() {
                 </motion.button>
               </>
             )}
-            <motion.button
-              className="btn-outline"
-              onClick={() => navigate('/experience')}
-              whileHover={{ scale: 1.04, y: -2 }}
-              whileTap={{ scale: 0.97 }}
-              style={{
-                borderColor: 'rgba(0,212,255,0.5)',
-                color: '#00d4ff',
-                background: 'rgba(0,212,255,0.08)',
-              }}
-            >
-              ◆ Launch 3D Experience
-            </motion.button>
+            {/* 3D experience entry point — hidden from attendees */}
+            {user?.role !== 'attendee' && (
+              <motion.button
+                className="btn-outline"
+                onClick={() => navigate('/experience')}
+                whileHover={{ scale: 1.04, y: -2 }}
+                whileTap={{ scale: 0.97 }}
+                style={{
+                  borderColor: 'rgba(0,212,255,0.5)',
+                  color: '#00d4ff',
+                  background: 'rgba(0,212,255,0.08)',
+                }}
+              >
+                ◆ Launch 3D Experience
+              </motion.button>
+            )}
           </motion.div>
 
           <HeroVisual />

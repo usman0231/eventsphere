@@ -2,15 +2,19 @@ import React, { useState } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import Logo from './Logo';
+import NotificationBell from './NotificationBell';
 
 // Sidebar items for the dashboard. `end` makes the index link only match exactly.
 // `roles` limits visibility — omitted means every authenticated role sees it.
 const NAV = [
   { to: '/dashboard', label: 'Dashboard', icon: '📊', end: true },
+  { to: '/expos/create', label: 'Create Expo', icon: '➕', roles: ['organizer'] },
+  { to: '/dashboard/expo-approvals', label: 'Approve Expos', icon: '🗂️', roles: ['admin', 'superadmin'] },
   { to: '/dashboard/checkin', label: 'Check-In', icon: '🎟️', roles: ['admin', 'organizer'] },
   { to: '/dashboard/attendance', label: 'Attendance', icon: '✅', roles: ['admin', 'organizer'] },
   { to: '/dashboard/messages', label: 'Messages', icon: '✉️' },
   { to: '/dashboard/users', label: 'Users', icon: '👥', roles: ['admin'] },
+  { to: '/dashboard/payments', label: 'Payments', icon: '💳', roles: ['admin', 'superadmin'] },
   { to: '/dashboard/feedback', label: 'Feedback', icon: '💬', roles: ['admin'] },
   { to: '/dashboard/announce', label: 'Announcements', icon: '📣', roles: ['admin'] },
   { to: '/dashboard/activity', label: 'Activity Log', icon: '🛡️', roles: ['admin'] },
@@ -48,18 +52,13 @@ export default function AdminLayout() {
         </div>
 
         <div className="admin-topbar-actions">
+          <NotificationBell />
           {user && (
             <span className="admin-shell-user" title={user.email}>
               <span className="admin-shell-avatar">{user.name?.[0]?.toUpperCase()}</span>
               <span className="admin-shell-uname">{user.name}</span>
             </span>
           )}
-          <NavLink to="/home" className="admin-shell-exit" title="Back to the main site">
-            ↩ Exit to site
-          </NavLink>
-          <button className="admin-shell-logout" onClick={handleLogout}>
-            Logout
-          </button>
         </div>
       </header>
 
@@ -78,7 +77,18 @@ export default function AdminLayout() {
             </NavLink>
           ))}
         </nav>
-        <div className="admin-side-foot">EventSphere Admin · v1</div>
+
+        {/* Exit/Logout live at the sidebar bottom — consistent with the
+            organizer and exhibitor dashboards. */}
+        <div className="admin-side-bottom">
+          <NavLink to="/home" className="admin-side-link" onClick={() => setMenuOpen(false)}>
+            <span className="admin-side-icon">↩</span> Back to site
+          </NavLink>
+          <button className="admin-side-link admin-side-logout" onClick={handleLogout}>
+            <span className="admin-side-icon">🚪</span> Logout
+          </button>
+          <div className="admin-side-foot">EventSphere Admin · v1</div>
+        </div>
       </aside>
 
       <main className="admin-shell-main">

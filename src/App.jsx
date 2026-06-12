@@ -22,7 +22,6 @@ const ResendVerificationPage = lazy(() => import('./pages/ResendVerificationPage
 const ExposPage = lazy(() => import('./pages/ExposPage'));
 const CreateExpoPage = lazy(() => import('./pages/CreateExpoPage'));
 const ProfilePage = lazy(() => import('./pages/ProfilePage'));
-const ExhibitorPortalPage = lazy(() => import('./pages/ExhibitorPortalPage'));
 const BoothManagementPage = lazy(() => import('./pages/BoothManagementPage'));
 const PublicFloorPage = lazy(() => import('./pages/PublicFloorPage'));
 const SessionsPage = lazy(() => import('./pages/SessionsPage'));
@@ -33,6 +32,8 @@ const AdminUsersPage = lazy(() => import('./pages/admin/AdminUsersPage'));
 const AdminFeedbackPage = lazy(() => import('./pages/admin/AdminFeedbackPage'));
 const AdminAnnouncePage = lazy(() => import('./pages/admin/AdminAnnouncePage'));
 const AdminActivityPage = lazy(() => import('./pages/admin/AdminActivityPage'));
+const AdminPaymentsPage = lazy(() => import('./pages/admin/AdminPaymentsPage'));
+const AdminExpoApprovalsPage = lazy(() => import('./pages/admin/AdminExpoApprovalsPage'));
 const CheckInPage = lazy(() => import('./pages/CheckInPage'));
 const AttendancePage = lazy(() => import('./pages/admin/AttendancePage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
@@ -46,6 +47,8 @@ const BlogPage = lazy(() => import('./pages/BlogPage'));
 const ExperiencePage = lazy(() => import('./pages/ExperiencePage'));
 const AdminDashboardPage = lazy(() => import('./pages/admin/AdminDashboardPage'));
 const ExpoDetailPage = lazy(() => import('./pages/ExpoDetailPage'));
+const ExhibitorDashboard = lazy(() => import('./pages/ExhibitorDashboard'));
+const OrganizerDashboard = lazy(() => import('./pages/OrganizerDashboard'));
 
 const ProtectedRoute = ({ children, roles }) => {
   const { user, loading } = useAuth();
@@ -85,12 +88,38 @@ function AppRoutes() {
         }
       />
 
+      {/* Exhibitor dashboard — full-featured back-office with its own shell, separate
+          from both the public Layout and the admin/organizer AdminLayout. */}
+      <Route
+        path="/exhibitor"
+        element={
+          <ProtectedRoute roles={['exhibitor']}>
+            <Suspense fallback={<LoadingScreen />}>
+              <ExhibitorDashboard />
+            </Suspense>
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Organizer dashboard — full-featured control panel with its own shell.
+          Organizers also retain access to /dashboard/checkin & /dashboard/attendance. */}
+      <Route
+        path="/organizer"
+        element={
+          <ProtectedRoute roles={['organizer']}>
+            <Suspense fallback={<LoadingScreen />}>
+              <OrganizerDashboard />
+            </Suspense>
+          </ProtectedRoute>
+        }
+      />
+
       {/* Dashboard back-office — its own shell, separate from the public site Layout.
           Attendees have no dashboard (they use the frontend); admin-only sections guarded individually. */}
       <Route
         path="/dashboard"
         element={
-          <ProtectedRoute roles={['admin', 'superadmin', 'organizer', 'exhibitor']}>
+          <ProtectedRoute roles={['admin', 'superadmin', 'organizer']}>
             <AdminLayout />
           </ProtectedRoute>
         }
@@ -100,6 +129,8 @@ function AppRoutes() {
         <Route path="attendance" element={<ProtectedRoute roles={['admin','organizer']}><AttendancePage /></ProtectedRoute>} />
         <Route path="messages" element={<MessagesPage />} />
         <Route path="users" element={<ProtectedRoute roles={['admin']}><AdminUsersPage /></ProtectedRoute>} />
+        <Route path="payments" element={<ProtectedRoute roles={['admin','superadmin']}><AdminPaymentsPage /></ProtectedRoute>} />
+        <Route path="expo-approvals" element={<ProtectedRoute roles={['admin','superadmin']}><AdminExpoApprovalsPage /></ProtectedRoute>} />
         <Route path="feedback" element={<ProtectedRoute roles={['admin']}><AdminFeedbackPage /></ProtectedRoute>} />
         <Route path="announce" element={<ProtectedRoute roles={['admin']}><AdminAnnouncePage /></ProtectedRoute>} />
         <Route path="activity" element={<ProtectedRoute roles={['admin']}><AdminActivityPage /></ProtectedRoute>} />
@@ -130,7 +161,8 @@ function AppRoutes() {
         <Route path="expos/:id/sessions" element={<ProtectedRoute><SessionsPage /></ProtectedRoute>} />
         <Route path="expos/:id/sponsors" element={<ProtectedRoute roles={['admin','organizer']}><SponsorsPage /></ProtectedRoute>} />
         <Route path="profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
-        <Route path="exhibitor-portal" element={<ProtectedRoute roles={['exhibitor']}><ExhibitorPortalPage /></ProtectedRoute>} />
+        {/* Legacy exhibitor portal now lives in the full ExhibitorDashboard at /exhibitor */}
+        <Route path="exhibitor-portal" element={<Navigate to="/exhibitor" replace />} />
         <Route path="feedback" element={<ProtectedRoute><FeedbackPage /></ProtectedRoute>} />
         <Route path="about" element={<ProtectedRoute><AboutPage /></ProtectedRoute>} />
         <Route path="services" element={<ProtectedRoute><ServicesPage /></ProtectedRoute>} />

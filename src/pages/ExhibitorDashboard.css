@@ -1,0 +1,484 @@
+/* ════════════════════════════════════════════════════════════════════════
+   EventSphere — Exhibitor Dashboard
+   Dark glassmorphism · bg #0a0a1a · purple #6c3de8 · pink #e83d8a
+   Fonts: Playfair Display (headings) · DM Sans (body)
+   ════════════════════════════════════════════════════════════════════════ */
+
+.exh-shell {
+  --bg: #0a0a1a;
+  --bg2: #0d1b3e;
+  --card: rgba(255, 255, 255, 0.04);
+  --card-border: rgba(255, 255, 255, 0.07);
+  --purple: #6c3de8;
+  --purple2: #7b2ff7;
+  --pink: #e83d8a;
+  --pink2: #ff006e;
+  --cyan: #00d4ff;
+  --orange: #ff6b35;
+  --green: #00ff88;
+  --yellow: #ffb300;
+  --text: #f0f0ff;
+  --muted: rgba(240, 240, 255, 0.55);
+
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', system-ui, sans-serif;
+  overflow-x: hidden;
+}
+
+/* Fixed orb decorations */
+.exh-orb {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(110px);
+  opacity: 0.35;
+  pointer-events: none;
+  z-index: 0;
+}
+.exh-orb-1 { width: 420px; height: 420px; background: var(--purple); top: -120px; left: 180px; }
+.exh-orb-2 { width: 380px; height: 380px; background: var(--pink); bottom: -120px; right: -80px; }
+
+/* Purple scrollbar */
+.exh-shell *::-webkit-scrollbar { width: 9px; height: 9px; }
+.exh-shell *::-webkit-scrollbar-track { background: transparent; }
+.exh-shell *::-webkit-scrollbar-thumb { background: linear-gradient(var(--purple), var(--pink)); border-radius: 50px; }
+.exh-shell * { scrollbar-color: var(--purple) transparent; scrollbar-width: thin; }
+
+/* ── Mobile top bar ──────────────────────────────────────────────────────── */
+.exh-mobilebar {
+  display: none;
+  position: sticky; top: 0; z-index: 40;
+  align-items: center; gap: 14px;
+  padding: 12px 16px;
+  background: rgba(10, 10, 26, 0.9);
+  border-bottom: 1px solid var(--card-border);
+  backdrop-filter: blur(20px);
+}
+.exh-burger { font-size: 1.4rem; line-height: 1; background: none; border: none; color: var(--text); cursor: pointer; }
+.exh-mobilebar-title { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 1.1rem; }
+
+/* ── Sidebar ─────────────────────────────────────────────────────────────── */
+.exh-sidebar {
+  position: sticky; top: 0; z-index: 30;
+  flex-shrink: 0; width: 280px; height: 100vh;
+  display: flex; flex-direction: column;
+  padding: 26px 18px;
+  background: linear-gradient(180deg, rgba(13, 27, 62, 0.55), rgba(10, 10, 26, 0.78));
+  border-right: 1px solid var(--card-border);
+  backdrop-filter: blur(20px);
+}
+.exh-side-top {
+  display: flex; flex-direction: column; align-items: center; text-align: center;
+  padding-bottom: 20px; margin-bottom: 16px;
+  border-bottom: 1px solid var(--card-border);
+}
+.exh-side-avatar {
+  width: 66px; height: 66px; display: grid; place-items: center;
+  border-radius: 20px; margin-bottom: 12px;
+  font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 800; color: #fff;
+  background: linear-gradient(135deg, var(--purple), var(--pink));
+  box-shadow: 0 10px 26px rgba(108, 61, 232, 0.45);
+}
+.exh-side-company { font-family: 'Playfair Display', serif; font-size: 1.12rem; font-weight: 700; line-height: 1.25; }
+.exh-side-uname { font-size: 0.8rem; color: var(--muted); margin-top: 2px; }
+.exh-side-role {
+  margin-top: 8px; padding: 3px 12px; border-radius: 50px;
+  font-size: 0.7rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
+  color: var(--cyan); background: rgba(0, 212, 255, 0.12); border: 1px solid rgba(0, 212, 255, 0.3);
+}
+.exh-side-status { margin-top: 8px; font-size: 0.78rem; font-weight: 600; }
+
+.exh-nav { display: flex; flex-direction: column; gap: 4px; flex: 1; overflow-y: auto; }
+.exh-nav-item {
+  display: flex; align-items: center; gap: 12px; width: 100%;
+  padding: 11px 14px; border: 1px solid transparent; border-left: 3px solid transparent;
+  border-radius: 14px; background: none; color: var(--muted);
+  font-family: 'DM Sans', sans-serif; font-size: 0.92rem; font-weight: 500; text-align: left;
+  cursor: pointer; transition: all 0.3s ease;
+}
+.exh-nav-item:hover { color: var(--text); background: rgba(255, 255, 255, 0.04); transform: translateX(2px); }
+.exh-nav-item.active {
+  color: #fff;
+  background: linear-gradient(135deg, rgba(108, 61, 232, 0.28), rgba(232, 61, 138, 0.2));
+  border-color: rgba(123, 47, 247, 0.4); border-left-color: var(--pink);
+  box-shadow: 0 6px 18px rgba(108, 61, 232, 0.22);
+}
+.exh-nav-icon { font-size: 1.05rem; width: 22px; text-align: center; }
+.exh-nav-badge {
+  margin-left: auto; min-width: 22px; padding: 1px 7px; border-radius: 50px;
+  font-size: 0.72rem; font-weight: 700; text-align: center; color: #fff;
+  background: linear-gradient(135deg, var(--purple), var(--purple2));
+}
+.exh-nav-badge.pink { background: linear-gradient(135deg, var(--pink), var(--pink2)); }
+.exh-nav-badge.pulse { animation: exh-pulse 1.6s ease-in-out infinite; }
+@keyframes exh-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(232, 61, 138, 0.5); }
+  50% { box-shadow: 0 0 0 6px rgba(232, 61, 138, 0); }
+}
+
+.exh-side-bottom {
+  display: flex; flex-direction: column; gap: 2px;
+  padding-top: 14px; margin-top: 12px; border-top: 1px solid var(--card-border);
+}
+.exh-side-link {
+  display: flex; align-items: center; gap: 10px; padding: 10px 14px;
+  border: none; border-radius: 12px; background: none; color: var(--muted);
+  font-family: 'DM Sans', sans-serif; font-size: 0.88rem; text-align: left;
+  cursor: pointer; transition: all 0.3s ease;
+}
+.exh-side-link:hover { color: var(--text); background: rgba(255, 255, 255, 0.04); }
+.exh-side-link.exh-logout:hover { color: #ff80ab; background: rgba(255, 0, 110, 0.1); }
+.exh-pill {
+  margin-left: auto; min-width: 20px; padding: 1px 7px; border-radius: 50px;
+  font-size: 0.7rem; font-weight: 700; text-align: center; color: #fff;
+  background: linear-gradient(135deg, var(--purple), var(--pink));
+}
+
+.exh-backdrop { display: none; position: fixed; inset: 0; z-index: 25; background: rgba(0, 0, 0, 0.55); backdrop-filter: blur(2px); }
+
+/* ── Main ────────────────────────────────────────────────────────────────── */
+.exh-main { position: relative; z-index: 1; flex: 1; min-width: 0; padding: 34px 38px 60px; }
+.exh-tabwrap { animation: exh-fade 0.4s ease; }
+@keyframes exh-fade { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ── Banners ─────────────────────────────────────────────────────────────── */
+.exh-banner {
+  display: flex; align-items: center; justify-content: space-between; gap: 14px;
+  padding: 13px 20px; margin-bottom: 18px; border-radius: 16px; font-size: 0.9rem;
+}
+.exh-banner.pending {
+  color: #ffd66b; background: rgba(255, 179, 0, 0.1); border: 1px solid rgba(255, 179, 0, 0.3);
+}
+.exh-banner.success {
+  color: var(--green); background: linear-gradient(120deg, rgba(0, 255, 136, 0.12), rgba(0, 212, 255, 0.08));
+  border: 1px solid rgba(0, 255, 136, 0.3); margin-bottom: 22px;
+}
+.exh-banner button { background: none; border: none; color: inherit; font-size: 0.95rem; cursor: pointer; opacity: 0.7; }
+.exh-banner button:hover { opacity: 1; }
+
+/* ── Headings ────────────────────────────────────────────────────────────── */
+.exh-h2 { font-family: 'Playfair Display', serif; font-size: 1.75rem; font-weight: 800; margin: 0 0 22px; }
+.exh-section-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 22px; flex-wrap: wrap; }
+.exh-section-head .exh-h2 { margin: 0; }
+.exh-muted { color: var(--muted); font-size: 0.9rem; }
+.exh-link-btn { background: none; border: none; color: var(--cyan); font-family: 'DM Sans', sans-serif; font-size: 0.82rem; font-weight: 600; cursor: pointer; padding: 0; }
+.exh-link-btn:hover { text-decoration: underline; }
+.exh-role-chip { padding: 2px 10px; border-radius: 50px; font-size: 0.72rem; font-weight: 700; color: var(--cyan); background: rgba(0, 212, 255, 0.12); border: 1px solid rgba(0, 212, 255, 0.3); }
+
+/* ── Welcome ─────────────────────────────────────────────────────────────── */
+.exh-welcome {
+  display: flex; align-items: center; justify-content: space-between; gap: 18px; flex-wrap: wrap;
+  padding: 26px 28px; margin-bottom: 22px; border-radius: 22px;
+  background: linear-gradient(120deg, rgba(108, 61, 232, 0.22), rgba(232, 61, 138, 0.16));
+  border: 1px solid rgba(123, 47, 247, 0.32); box-shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
+}
+.exh-welcome-title { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 800; margin: 0 0 8px; }
+.exh-welcome-sub { color: rgba(240, 240, 255, 0.7); margin: 0; font-size: 0.95rem; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.exh-status-pill { padding: 8px 16px; border-radius: 50px; font-size: 0.82rem; font-weight: 600; border: 1px solid transparent; white-space: nowrap; }
+
+/* ── Stats ───────────────────────────────────────────────────────────────── */
+.exh-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 22px; }
+.exh-stat-card {
+  display: flex; align-items: center; gap: 14px; padding: 18px 20px; border-radius: 20px;
+  background: var(--card); border: 1px solid var(--card-border); backdrop-filter: blur(20px);
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+.exh-stat-card:hover { transform: translateY(-3px); border-color: rgba(123, 47, 247, 0.35); }
+.exh-stat-icon { width: 48px; height: 48px; flex-shrink: 0; display: grid; place-items: center; border-radius: 14px; font-size: 1.3rem; }
+.exh-stat-value { font-family: 'Playfair Display', serif; font-size: 1.9rem; font-weight: 800; line-height: 1; }
+.exh-stat-label { font-size: 0.8rem; color: var(--muted); margin-top: 4px; }
+
+.exh-ministats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 18px; }
+.exh-ministat {
+  display: flex; flex-direction: column; align-items: center; padding: 14px; border-radius: 16px;
+  background: var(--card); border: 1px solid var(--card-border);
+}
+.exh-ministat-v { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 800; }
+.exh-ministat-l { font-size: 0.78rem; color: var(--muted); margin-top: 2px; }
+
+/* ── Cards & grid ────────────────────────────────────────────────────────── */
+.exh-grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+.exh-card { padding: 22px 24px; border-radius: 20px; background: var(--card); border: 1px solid var(--card-border); backdrop-filter: blur(20px); }
+.exh-card-title { font-family: 'Playfair Display', serif; font-size: 1.15rem; font-weight: 700; margin: 0 0 16px; }
+.exh-bh-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+.exh-bh-top .exh-card-title { margin: 0; }
+
+.exh-booth-highlight { background: linear-gradient(160deg, rgba(108, 61, 232, 0.16), rgba(0, 212, 255, 0.08)); border-color: rgba(123, 47, 247, 0.3); }
+.exh-bh-num { font-family: 'Playfair Display', serif; font-size: 2.6rem; font-weight: 800; line-height: 1; background: linear-gradient(135deg, var(--purple), var(--pink)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.exh-bh-expo { font-weight: 600; margin: 8px 0 4px; }
+
+.exh-empty-card { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 12px; }
+.exh-empty-card p { color: var(--muted); margin: 0; font-size: 0.9rem; }
+
+.exh-notif-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+.exh-notif { display: flex; flex-direction: column; gap: 2px; padding: 12px 14px; border-radius: 14px; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--card-border); }
+.exh-notif.unread { background: rgba(108, 61, 232, 0.1); border-color: rgba(123, 47, 247, 0.3); }
+.exh-notif-title { font-weight: 600; font-size: 0.9rem; }
+.exh-notif-msg { color: var(--muted); font-size: 0.83rem; }
+.exh-notif-time { color: rgba(240, 240, 255, 0.4); font-size: 0.74rem; }
+
+/* Participation list */
+.exh-part-list { display: flex; flex-direction: column; gap: 10px; }
+.exh-part-row {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 13px 16px; border-radius: 14px; background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--card-border); color: var(--text); text-align: left; cursor: pointer;
+  transition: transform 0.18s, border-color 0.3s;
+}
+.exh-part-row:hover { transform: translateX(3px); border-color: rgba(232, 61, 138, 0.4); }
+.exh-part-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+
+/* Quick actions */
+.exh-quick-actions { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 22px; }
+.exh-qa {
+  padding: 16px 18px; border-radius: 16px; background: var(--card); border: 1px solid var(--card-border);
+  color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 600; cursor: pointer;
+  transition: all 0.3s ease;
+}
+.exh-qa:hover { transform: translateY(-3px); border-color: rgba(123, 47, 247, 0.4); background: linear-gradient(135deg, rgba(108, 61, 232, 0.16), rgba(232, 61, 138, 0.12)); }
+
+/* ── Buttons ─────────────────────────────────────────────────────────────── */
+.exh-btn-primary {
+  padding: 11px 22px; border: none; border-radius: 50px;
+  font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 700; color: #fff; cursor: pointer;
+  background: linear-gradient(135deg, var(--purple), var(--pink));
+  box-shadow: 0 8px 22px rgba(108, 61, 232, 0.34); transition: all 0.3s ease;
+}
+.exh-btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(232, 61, 138, 0.4); }
+.exh-btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+.exh-btn-ghost {
+  padding: 10px 18px; border: 1px solid var(--card-border); border-radius: 50px;
+  font-family: 'DM Sans', sans-serif; font-size: 0.86rem; font-weight: 600; color: var(--text);
+  background: rgba(255, 255, 255, 0.04); cursor: pointer; transition: all 0.3s ease;
+}
+.exh-btn-ghost:hover { border-color: rgba(123, 47, 247, 0.45); background: rgba(255, 255, 255, 0.07); transform: translateY(-2px); }
+.exh-btn-ghost:disabled { opacity: 0.6; cursor: not-allowed; }
+.exh-btn-danger {
+  padding: 10px 18px; border: 1px solid rgba(255, 0, 110, 0.4); border-radius: 50px;
+  font-family: 'DM Sans', sans-serif; font-size: 0.86rem; font-weight: 600; color: #ff80ab;
+  background: rgba(255, 0, 110, 0.1); cursor: pointer; transition: background 0.3s;
+}
+.exh-btn-danger:hover { background: rgba(255, 0, 110, 0.18); }
+.exh-sm { padding: 7px 14px; font-size: 0.8rem; }
+
+/* ── Badges & chips ──────────────────────────────────────────────────────── */
+.exh-badge { padding: 4px 12px; border-radius: 50px; font-size: 0.74rem; font-weight: 700; border: 1px solid transparent; white-space: nowrap; }
+.exh-chip { display: inline-block; padding: 3px 10px; border-radius: 50px; font-size: 0.7rem; font-weight: 600; color: var(--cyan); background: rgba(0, 212, 255, 0.12); border: 1px solid rgba(0, 212, 255, 0.3); }
+
+/* ── Empty state ─────────────────────────────────────────────────────────── */
+.exh-empty {
+  display: flex; flex-direction: column; align-items: center; text-align: center; gap: 10px;
+  padding: 56px 28px; border-radius: 22px; background: var(--card); border: 1px dashed var(--card-border);
+}
+.exh-empty.sm { padding: 36px 20px; }
+.exh-empty-icon { font-size: 2.8rem; filter: drop-shadow(0 6px 18px rgba(232, 61, 138, 0.4)); }
+.exh-empty h3 { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; margin: 6px 0 0; }
+.exh-empty p { color: var(--muted); max-width: 420px; margin: 0 0 8px; }
+
+/* ── Filters ─────────────────────────────────────────────────────────────── */
+.exh-filter-row { display: flex; gap: 12px; margin-bottom: 18px; flex-wrap: wrap; }
+.exh-filter-row .exh-input { flex: 1; min-width: 160px; }
+.exh-sel { max-width: 220px; }
+
+/* ── Applications ────────────────────────────────────────────────────────── */
+.exh-app-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; }
+.exh-app-card { display: flex; flex-direction: column; gap: 6px; transition: transform 0.3s, border-color 0.3s; }
+.exh-app-card:hover { transform: translateY(-3px); border-color: rgba(123, 47, 247, 0.35); }
+.exh-app-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 2px; }
+.exh-app-company { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; margin: 0; }
+.exh-app-meta { color: var(--muted); font-size: 0.85rem; margin: 0; }
+.exh-booth-badge { display: inline-block; align-self: flex-start; padding: 5px 12px; border-radius: 50px; font-size: 0.78rem; font-weight: 600; color: var(--green); background: rgba(0, 255, 136, 0.12); border: 1px solid rgba(0, 255, 136, 0.3); }
+.exh-reject { margin-top: 8px; padding: 8px 12px; border-radius: 12px; font-size: 0.82rem; color: #ff80ab; background: rgba(255, 0, 110, 0.1); border: 1px solid rgba(255, 0, 110, 0.25); }
+.exh-app-date { color: rgba(240, 240, 255, 0.4); font-size: 0.76rem; margin: 8px 0 0; }
+
+/* ── Tags ────────────────────────────────────────────────────────────────── */
+.exh-taginput { display: flex; flex-direction: column; gap: 8px; }
+.exh-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.exh-tag {
+  display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 50px;
+  font-size: 0.78rem; color: #fff; background: linear-gradient(135deg, rgba(108, 61, 232, 0.4), rgba(232, 61, 138, 0.32));
+  border: 1px solid rgba(123, 47, 247, 0.4);
+}
+.exh-tag.static { background: rgba(255, 255, 255, 0.05); border-color: var(--card-border); color: var(--text); }
+.exh-tag button { background: none; border: none; color: inherit; cursor: pointer; font-size: 0.95rem; line-height: 1; opacity: 0.7; }
+.exh-tag button:hover { opacity: 1; }
+
+/* ── Detail rows ─────────────────────────────────────────────────────────── */
+.exh-detail-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--card-border); }
+.exh-detail-row:last-of-type { border-bottom: none; }
+.exh-detail-row span { color: var(--muted); font-size: 0.86rem; }
+.exh-detail-row strong { font-size: 0.9rem; }
+
+/* ── Forms ───────────────────────────────────────────────────────────────── */
+.exh-label { display: block; margin: 14px 0 6px; font-size: 0.8rem; font-weight: 600; color: rgba(240, 240, 255, 0.75); }
+.exh-input {
+  width: 100%; padding: 11px 14px; border-radius: 12px; border: 1px solid var(--card-border);
+  background: rgba(255, 255, 255, 0.04); color: var(--text);
+  font-family: 'DM Sans', sans-serif; font-size: 0.9rem; outline: none; transition: border-color 0.3s, background 0.3s;
+}
+.exh-input::placeholder { color: rgba(240, 240, 255, 0.35); }
+.exh-input:focus { border-color: rgba(123, 47, 247, 0.6); background: rgba(255, 255, 255, 0.06); }
+.exh-input:disabled { opacity: 0.6; cursor: not-allowed; }
+.exh-input option { background: #0d1b3e; color: var(--text); }
+.exh-textarea { resize: vertical; min-height: 80px; line-height: 1.5; }
+.exh-form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+/* Checkboxes */
+.exh-checks { display: flex; flex-wrap: wrap; gap: 8px; }
+.exh-check {
+  display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 50px;
+  font-size: 0.82rem; cursor: pointer; background: rgba(255, 255, 255, 0.04); border: 1px solid var(--card-border);
+  transition: all 0.3s ease;
+}
+.exh-check.on { color: #fff; background: linear-gradient(135deg, rgba(108, 61, 232, 0.3), rgba(232, 61, 138, 0.24)); border-color: rgba(123, 47, 247, 0.4); }
+.exh-check input { accent-color: var(--purple); }
+
+/* Toggles */
+.exh-toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--card-border); font-size: 0.9rem; }
+.exh-toggle { width: 46px; height: 26px; border-radius: 50px; border: none; background: rgba(255, 255, 255, 0.12); cursor: pointer; position: relative; transition: background 0.3s; }
+.exh-toggle span { position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: #fff; transition: transform 0.3s; }
+.exh-toggle.on { background: linear-gradient(135deg, var(--purple), var(--pink)); }
+.exh-toggle.on span { transform: translateX(20px); }
+
+/* Password strength */
+.exh-pwstrength { display: flex; align-items: center; gap: 12px; margin-top: 10px; font-size: 0.8rem; font-weight: 600; }
+.exh-pwbar { flex: 1; height: 6px; border-radius: 50px; background: rgba(255, 255, 255, 0.1); overflow: hidden; }
+.exh-pwbar span { display: block; height: 100%; border-radius: 50px; transition: width 0.3s, background 0.3s; }
+
+.exh-danger { border-color: rgba(255, 0, 110, 0.25); }
+
+/* ── Profile preview ─────────────────────────────────────────────────────── */
+.exh-preview {
+  display: flex; flex-direction: column; align-items: center; text-align: center; gap: 6px;
+  padding: 22px; border-radius: 18px;
+  background: linear-gradient(160deg, rgba(108, 61, 232, 0.14), rgba(232, 61, 138, 0.1));
+  border: 1px solid rgba(123, 47, 247, 0.28);
+}
+.exh-preview-logo {
+  width: 78px; height: 78px; display: grid; place-items: center; border-radius: 22px; overflow: hidden;
+  font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 800; color: #fff;
+  background: linear-gradient(135deg, var(--purple), var(--pink)); box-shadow: 0 10px 26px rgba(108, 61, 232, 0.4);
+}
+.exh-preview-logo img { width: 100%; height: 100%; object-fit: cover; }
+.exh-preview-name { font-family: 'Playfair Display', serif; font-size: 1.25rem; font-weight: 700; margin: 8px 0 0; }
+.exh-preview-cat { padding: 3px 12px; border-radius: 50px; font-size: 0.72rem; font-weight: 600; color: var(--cyan); background: rgba(0, 212, 255, 0.12); border: 1px solid rgba(0, 212, 255, 0.3); }
+.exh-preview-bio { color: rgba(240, 240, 255, 0.7); font-size: 0.86rem; line-height: 1.5; margin: 8px 0 0; }
+.exh-preview-link { color: var(--cyan); font-size: 0.84rem; text-decoration: none; margin-top: 6px; }
+.exh-preview-link:hover { text-decoration: underline; }
+.exh-preview-meta { color: var(--muted); font-size: 0.82rem; margin: 4px 0 0; }
+.exh-preview-note { color: rgba(240, 240, 255, 0.4); font-size: 0.74rem; margin: 14px 0 0; font-style: italic; }
+
+/* ── Schedule ────────────────────────────────────────────────────────────── */
+.exh-expo-tabs { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+.exh-expo-tab {
+  padding: 9px 18px; border-radius: 50px; border: 1px solid var(--card-border);
+  background: rgba(255, 255, 255, 0.03); color: var(--muted);
+  font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease;
+}
+.exh-expo-tab.active { color: #fff; background: linear-gradient(135deg, var(--purple), var(--pink)); border-color: transparent; }
+.exh-session-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 18px; }
+.exh-session-card { display: flex; flex-direction: column; gap: 6px; transition: transform 0.3s, border-color 0.3s; }
+.exh-session-card:hover { transform: translateY(-3px); border-color: rgba(123, 47, 247, 0.35); }
+.exh-session-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 4px; }
+.exh-session-status { font-size: 0.74rem; font-weight: 600; }
+.exh-session-title { font-family: 'Playfair Display', serif; font-size: 1.08rem; font-weight: 700; margin: 0 0 4px; }
+.exh-speaker { display: flex; align-items: center; gap: 8px; font-size: 0.82rem; color: rgba(240,240,255,0.75); }
+.exh-speaker-av { width: 26px; height: 26px; flex-shrink: 0; display: grid; place-items: center; border-radius: 50%; font-size: 0.74rem; font-weight: 700; color: #fff; background: linear-gradient(135deg, var(--purple), var(--pink)); }
+.exh-progress { height: 6px; border-radius: 50px; background: rgba(255, 255, 255, 0.08); overflow: hidden; margin-top: 6px; }
+.exh-progress span { display: block; height: 100%; border-radius: 50px; background: linear-gradient(90deg, var(--purple), var(--pink)); }
+
+/* ── Messages (split) ────────────────────────────────────────────────────── */
+.exh-msg-split { display: grid; grid-template-columns: 340px 1fr; gap: 18px; align-items: start; }
+.exh-msg-left { display: flex; flex-direction: column; gap: 12px; }
+.exh-msg-tabs { display: flex; gap: 8px; }
+.exh-msg-tab {
+  display: flex; align-items: center; gap: 8px; padding: 9px 20px; border-radius: 50px;
+  border: 1px solid var(--card-border); background: rgba(255, 255, 255, 0.03); color: var(--muted);
+  font-family: 'DM Sans', sans-serif; font-size: 0.86rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease;
+}
+.exh-msg-tab.active { color: #fff; background: linear-gradient(135deg, var(--purple), var(--pink)); border-color: transparent; }
+.exh-msg-toolbar { display: flex; align-items: center; gap: 10px; }
+.exh-msg-toolbar .exh-input { flex: 1; }
+.exh-msg-list { display: flex; flex-direction: column; gap: 8px; max-height: 64vh; overflow-y: auto; }
+.exh-msg {
+  display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 16px;
+  background: var(--card); border: 1px solid var(--card-border); cursor: pointer; transition: all 0.25s ease;
+}
+.exh-msg:hover { border-color: rgba(123, 47, 247, 0.35); }
+.exh-msg.sel { border-color: rgba(123, 47, 247, 0.55); background: rgba(108, 61, 232, 0.12); }
+.exh-msg.unread { background: rgba(108, 61, 232, 0.1); border-color: rgba(123, 47, 247, 0.32); }
+.exh-msg-avatar { width: 42px; height: 42px; flex-shrink: 0; display: grid; place-items: center; border-radius: 13px; font-weight: 700; color: #fff; background: linear-gradient(135deg, var(--purple), var(--pink)); }
+.exh-msg-avatar.lg { width: 52px; height: 52px; font-size: 1.2rem; border-radius: 16px; }
+.exh-msg-body { flex: 1; min-width: 0; }
+.exh-msg-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.exh-msg-row strong { display: flex; align-items: center; gap: 6px; font-size: 0.9rem; }
+.exh-role-mini { font-size: 0.64rem; font-weight: 600; text-transform: uppercase; color: var(--cyan); background: rgba(0, 212, 255, 0.12); border-radius: 50px; padding: 1px 7px; }
+.exh-msg-time { color: rgba(240, 240, 255, 0.4); font-size: 0.72rem; flex-shrink: 0; }
+.exh-msg-subject { font-size: 0.84rem; margin-top: 2px; color: rgba(240,240,255,0.85); }
+.exh-msg-subject.b { font-weight: 700; }
+.exh-msg-preview { color: var(--muted); font-size: 0.8rem; margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.exh-dot { width: 9px; height: 9px; flex-shrink: 0; border-radius: 50%; background: var(--pink); box-shadow: 0 0 10px rgba(232, 61, 138, 0.7); }
+.exh-msg-right { min-height: 300px; }
+.exh-msg-detail { padding: 24px; border-radius: 20px; background: var(--card); border: 1px solid var(--card-border); backdrop-filter: blur(20px); }
+.exh-msg-detail-head { display: flex; align-items: center; gap: 14px; padding-bottom: 16px; margin-bottom: 16px; border-bottom: 1px solid var(--card-border); }
+.exh-msg-detail-head p { margin: 2px 0 0; font-size: 0.8rem; text-transform: capitalize; }
+.exh-msg-detail-subject { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; margin: 0 0 12px; }
+.exh-msg-detail-body { white-space: pre-wrap; line-height: 1.65; color: rgba(240, 240, 255, 0.85); }
+.exh-reply { margin-top: 20px; padding-top: 18px; border-top: 1px solid var(--card-border); }
+
+/* ── Charts ──────────────────────────────────────────────────────────────── */
+.exh-chart { height: 260px; display: flex; align-items: center; justify-content: center; }
+
+/* ── History ─────────────────────────────────────────────────────────────── */
+.exh-history { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.exh-history li { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 11px 14px; border-radius: 12px; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--card-border); font-size: 0.88rem; }
+
+/* ── Booth header / QR ───────────────────────────────────────────────────── */
+.exh-booth-header { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+.exh-booth-header-info { flex: 1; min-width: 180px; }
+.exh-booth-num { width: 76px; height: 76px; flex-shrink: 0; display: grid; place-items: center; border-radius: 18px; font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 800; color: #fff; background: linear-gradient(135deg, var(--purple), var(--pink)); box-shadow: 0 8px 22px rgba(108, 61, 232, 0.4); }
+.exh-qr { display: flex; justify-content: center; padding: 16px; border-radius: 16px; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--card-border); }
+.exh-qr canvas { border-radius: 8px; }
+
+/* ── Skeleton ────────────────────────────────────────────────────────────── */
+.exh-skel { display: block; background: linear-gradient(90deg, rgba(255,255,255,0.04) 25%, rgba(255,255,255,0.09) 37%, rgba(255,255,255,0.04) 63%); background-size: 400% 100%; animation: exh-shimmer 1.4s ease infinite; }
+@keyframes exh-shimmer { 0% { background-position: 100% 0; } 100% { background-position: -100% 0; } }
+
+/* ── Modals ──────────────────────────────────────────────────────────────── */
+.exh-overlay { position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center; padding: 20px; background: rgba(5, 5, 16, 0.7); backdrop-filter: blur(6px); animation: exh-fade 0.25s ease; }
+.exh-modal { width: 100%; max-width: 560px; max-height: 90vh; display: flex; flex-direction: column; border-radius: 22px; background: linear-gradient(160deg, rgba(17, 17, 42, 0.98), rgba(13, 27, 62, 0.96)); border: 1px solid rgba(123, 47, 247, 0.3); box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6); animation: exh-pop 0.25s cubic-bezier(0.2, 0.8, 0.3, 1.1); }
+@keyframes exh-pop { from { opacity: 0; transform: translateY(20px) scale(0.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
+.exh-modal-head { display: flex; align-items: center; justify-content: space-between; padding: 20px 24px; border-bottom: 1px solid var(--card-border); }
+.exh-modal-head h3 { font-family: 'Playfair Display', serif; font-size: 1.25rem; font-weight: 700; margin: 0; }
+.exh-modal-x { width: 34px; height: 34px; border: none; border-radius: 10px; background: rgba(255, 255, 255, 0.05); color: var(--muted); font-size: 0.9rem; cursor: pointer; transition: all 0.3s; }
+.exh-modal-x:hover { background: rgba(255, 0, 110, 0.15); color: #ff80ab; }
+.exh-modal-body { padding: 8px 24px 20px; overflow-y: auto; }
+.exh-modal-foot { display: flex; justify-content: flex-end; gap: 12px; padding: 18px 24px; border-top: 1px solid var(--card-border); }
+.exh-error { margin-top: 12px; padding: 10px 14px; border-radius: 12px; font-size: 0.85rem; color: #ff80ab; background: rgba(255, 0, 110, 0.1); border: 1px solid rgba(255, 0, 110, 0.28); }
+
+/* ── Responsive ──────────────────────────────────────────────────────────── */
+@media (max-width: 1100px) {
+  .exh-msg-split { grid-template-columns: 1fr; }
+  .exh-msg-list { max-height: none; }
+}
+@media (max-width: 1024px) {
+  .exh-stats, .exh-quick-actions { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 860px) {
+  .exh-mobilebar { display: flex; }
+  .exh-sidebar { position: fixed; top: 0; left: 0; transform: translateX(-100%); transition: transform 0.3s ease; }
+  .exh-sidebar.open { transform: translateX(0); }
+  .exh-backdrop { display: block; }
+  .exh-main { padding: 22px 18px 50px; }
+  .exh-grid-2 { grid-template-columns: 1fr; }
+}
+@media (max-width: 520px) {
+  .exh-stats, .exh-quick-actions, .exh-ministats { grid-template-columns: 1fr; }
+  .exh-form-row { grid-template-columns: 1fr; }
+  .exh-welcome { padding: 20px; }
+  .exh-h2 { font-size: 1.45rem; }
+  .exh-ministats { grid-template-columns: repeat(2, 1fr); }
+}

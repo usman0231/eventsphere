@@ -13,6 +13,7 @@ import 'jspdf-autotable';
 import api from '../../utils/api';
 import { downloadCSV, dateStamp } from '../../utils/export';
 import AdminCharts from '../../components/AdminCharts';
+import OrganizerEmptyState from '../../components/OrganizerEmptyState';
 import { useAuth } from '../../context/AuthContext';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, LineElement, PointElement, Title, Tooltip, Legend, ArcElement, Filler);
@@ -237,8 +238,13 @@ export default function AdminDashboardPage() {
             )}
 
             {/* ── ORGANIZER: their events overview (ported from old dashboard) ── */}
-            {isOrganizer && analytics && (
+            {isOrganizer && myExpos.length === 0 && (
+              <OrganizerEmptyState name={user?.name} onCreate={() => navigate('/expos/create')} />
+            )}
+
+            {isOrganizer && myExpos.length > 0 && (
               <>
+                {analytics && (<>
                 <div className="dash-stats-grid">
                   {[
                     { icon:'🎪', label:'Total Expos', value:analytics.totalExpos, color:'#7b2ff7' },
@@ -317,18 +323,23 @@ export default function AdminDashboardPage() {
                   </div>
                 )}
 
+                </>)}
+
                 <h2 className="dash-section-title">My Expos</h2>
                 <div className="dash-expos-grid">
-                  {myExpos.length === 0 ? (
-                    <div className="dash-empty">
-                      <span>🎪</span>
-                      <p>No expos yet. Create your first one!</p>
-                      <button className="dash-btn-primary" onClick={() => navigate('/expos/create')}>Create Expo</button>
-                    </div>
-                  ) : myExpos.map(expo => (
+                  {myExpos.map(expo => (
                     <div key={expo._id} className="dash-expo-card" onClick={() => navigate(`/expos/${expo._id}`)}>
                       <div className="dash-expo-status" style={{ background:`${statusColor[expo.status]}20`, color:statusColor[expo.status], borderColor:`${statusColor[expo.status]}40` }}>{expo.status}</div>
+                      {expo.approvalStatus === 'pending' && (
+                        <div className="dash-expo-status" style={{ marginTop: 6, background:'rgba(255,179,0,0.12)', color:'#ffb300', borderColor:'rgba(255,179,0,0.35)' }}>⏳ Awaiting admin approval</div>
+                      )}
+                      {expo.approvalStatus === 'rejected' && (
+                        <div className="dash-expo-status" style={{ marginTop: 6, background:'rgba(255,0,110,0.12)', color:'#ff80ab', borderColor:'rgba(255,0,110,0.35)' }}>⚠️ Rejected by admin</div>
+                      )}
                       <h4 className="dash-expo-title">{expo.title}</h4>
+                      {expo.approvalStatus === 'rejected' && expo.rejectionReason && (
+                        <p className="dash-expo-meta" style={{ color:'#ff80ab' }}>Reason: {expo.rejectionReason}</p>
+                      )}
                       <p className="dash-expo-meta">📅 {dayjs(expo.startDate).format('MMM D, YYYY')}</p>
                       <p className="dash-expo-meta">📍 {expo.location?.venue}</p>
                       <div className="dash-expo-actions">
